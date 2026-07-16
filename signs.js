@@ -74,7 +74,7 @@
     },
     {
       id: "only-straight",
-      number: "311-A",
+      number: "311-C",
       name: "指定方向外進行禁止",
       meaning: "矢印の方向以外への車の進行を禁止する",
       explanation: "この図柄では直進だけができます。矢印の組合せには複数の種類があります。",
@@ -84,7 +84,7 @@
     },
     {
       id: "straight-or-left",
-      number: "311-B",
+      number: "311-A",
       name: "指定方向外進行禁止",
       meaning: "車は直進または左折のみできる",
       explanation: "矢印が示す直進と左折以外には進めません。",
@@ -314,7 +314,7 @@
     },
     {
       id: "slow",
-      number: "329",
+      number: "329-A",
       name: "徐行",
       meaning: "車と路面電車に徐行を指定する",
       explanation: "すぐに停止できるような速度で進行します。",
@@ -367,7 +367,7 @@
       number: "403",
       name: "駐車可",
       meaning: "車が駐車できることを示す",
-      explanation: "青い円の白いPが目印です。補助標識で条件が示されることがあります。",
+      explanation: "青い四角に白いPが目印です。補助標識で条件が示されることがあります。",
       category: "指示標識",
       shape: "blue-circle",
       visual: "parking"
@@ -404,73 +404,24 @@
     }
   ];
 
-  function personMarkup() {
-    return '<span class="person"><span></span></span>';
-  }
-
-  function bicycleMarkup() {
-    return '<span class="bicycle"><span></span></span>';
-  }
-
-  function visualMarkup(visual) {
-    const map = {
-      "road-closed": '<span class="sign-word">通行止</span>',
-      "empty": "",
-      "no-entry": '<span class="entry-bar"></span>',
-      "no-car": '<span class="vehicle"></span>',
-      "no-truck": '<span class="vehicle truck"></span>',
-      "no-motorcycle": '<span class="motorcycle"><span></span></span>',
-      "no-bicycle": bicycleMarkup(),
-      "arrow-up": '<span class="arrow-glyph">↑</span>',
-      "arrow-up-left": '<span class="arrow-glyph compact">←↑</span>',
-      "no-crossing": '<span class="turn-glyph">↔</span>',
-      "no-uturn": '<span class="turn-glyph">↶</span>',
-      "no-overtake": '<span class="vehicle-pair"><i></i><i></i></span>',
-      "no-overtake-double": '<span class="vehicle-pair double"><i></i><i></i></span>',
-      "no-stopping": '<span class="parking-lines double"></span>',
-      "no-parking": '<span class="parking-lines"></span>',
-      "weight": '<span class="limit-text">5.5t</span>',
-      "height": '<span class="limit-text"><span class="limit-arrows">↕</span>3.3m</span>',
-      "width": '<span class="limit-text"><span class="limit-arrows">↔</span>2.2m</span>',
-      "max-speed": '<span class="sign-number">50</span>',
-      "min-speed": '<span class="min-speed"><span class="sign-number">50</span></span>',
-      "car-only": '<span class="vehicle"></span>',
-      "bicycle-only": bicycleMarkup(),
-      "bicycle-pedestrian-only": '<span class="combined-users">' + bicycleMarkup() + personMarkup() + "</span>",
-      "pedestrian-only": personMarkup(),
-      "one-way": '<span class="arrow-glyph">→</span>',
-      "bicycle-one-way": '<span class="one-way-combo">' + bicycleMarkup() + '<b>→</b></span>',
-      "reserved-lane": '<span class="bus-copy">バス<br>専用</span>',
-      "bicycle-lane": '<span class="one-way-combo">' + bicycleMarkup() + '<b>専用</b></span>',
-      "bus-priority": '<span class="bus-copy">バス<br>優先</span>',
-      "lane-directions": '<span class="lane-glyph"><span>←</span><span>↑</span></span>',
-      "roundabout": '<span class="roundabout-glyph">↻</span>',
-      "slow": '<span class="slow-copy">徐行</span>',
-      "priority-ahead": '<span class="priority-ahead-glyph"></span>',
-      "stop": '<span class="stop-copy">止まれ<small>STOP</small></span>',
-      "no-pedestrian": personMarkup(),
-      "no-pedestrian-crossing": '<span class="pedestrian-crossing-glyph">' + personMarkup() + '<b>↔</b></span>',
-      "parking": '<span class="parking-letter">P</span>',
-      "priority-road": '<span class="priority-glyph"></span>',
-      "crosswalk": '<span class="crosswalk-box">' + personMarkup() + "</span>",
-      "bicycle-crossing": '<span class="crosswalk-box">' + bicycleMarkup() + "</span>"
-    };
-
-    return map[visual] || "";
+  function escapeAttribute(value) {
+    return String(value).replace(/[&<>"']/g, (character) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[character]);
   }
 
   function createSignMarkup(sign, size, concealLabel) {
     const sizeClass = size === "small" ? " is-small" : size === "medium" ? " is-medium" : "";
-    const slashKinds = new Set([
-      "road-closed", "no-car", "no-truck", "no-motorcycle", "no-bicycle", "no-crossing",
-      "no-uturn", "no-overtake", "no-overtake-double", "no-pedestrian", "no-pedestrian-crossing"
-    ]);
-    const slashClass = slashKinds.has(sign.visual) ? " prohibition-slash" : "";
-
-    const accessibility = concealLabel ? ' aria-hidden="true"' : ' role="img" aria-label="' + sign.name + '"';
-    return '<div class="road-sign ' + sign.shape + sizeClass + '"' + accessibility +
-      '><div class="sign-face' + slashClass + '"><div class="sign-content">' +
-      visualMarkup(sign.visual) + "</div></div></div>";
+    const accessibility = concealLabel ? ' alt="" aria-hidden="true"' : ' alt="' + escapeAttribute(sign.name) + '"';
+    const loading = size === "medium" ? "lazy" : "eager";
+    const priority = size === "large" ? ' fetchpriority="high"' : "";
+    return '<img class="road-sign' + sizeClass + '" src="assets/signs/' +
+      encodeURIComponent(sign.id) + '.png"' + accessibility +
+      ' width="512" height="512" loading="' + loading + '" decoding="async"' + priority + ">";
   }
 
   window.SIGN_DATA = signs;

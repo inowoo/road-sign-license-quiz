@@ -28,8 +28,9 @@ python -m http.server 8000
 ```text
 .
 ├── index.html   # 画面構造
-├── styles.css   # レイアウト、レスポンシブ表示、標識のCSS描画
-├── signs.js     # 問題データと標識描画用マークアップ
+├── assets/signs # 国土交通省の公的資料から切り出した標識画像（PNG、40枚）
+├── styles.css   # レイアウトとレスポンシブ表示
+├── signs.js     # 問題データと標識画像の読み込み処理
 ├── app.js       # クイズ、履歴保存、一覧表示の処理
 └── README.md    # このファイル
 ```
@@ -37,9 +38,9 @@ python -m http.server 8000
 ## 問題を追加する方法
 
 1. `signs.js` の `signs` 配列に問題オブジェクトを追加します。
-2. `id`、`number`、`name`、`meaning`、`explanation`、`category`、`shape`、`visual` を指定します。
-3. 新しい図柄が必要な場合は、`visualMarkup()` にマークアップを追加し、`styles.css` に対応するCSSを追加します。
-4. 正式名称と意味は、警察庁、国土交通省、e-Gov法令検索などの公的資料で照合します。
+2. `id`、`number`、`name`、`meaning`、`explanation`、`category` を指定します。
+3. `assets/signs/<id>.png` に、同じ `id` の標識画像を512×512pxで追加します。
+4. 標識画像、正式名称、意味は、警察庁、国土交通省、e-Gov法令検索などの公的資料で照合します。
 
 ## GitHub Pagesの公開方法
 
@@ -58,5 +59,7 @@ https://inowoo.github.io/road-sign-license-quiz/
 - [警察庁「交通の方法に関する教則」](https://www.npa.go.jp/bureau/traffic/20241113kyousoku.pdf)
 - [国土交通省「道路標識一覧」](https://www.mlit.go.jp/road/sign/sign/douro/ichiran.pdf)
 - [e-Gov法令検索「道路標識、区画線及び道路標示に関する命令」](https://laws.e-gov.go.jp/law/335M50004002003)
+
+サイト内の標識画像は、国土交通省道路局作成の「道路標識一覧」に掲載された図版を高解像度で切り出し、表示用の余白と透過処理だけを行ったものです。「追越し禁止」と「前方優先道路」は、実際の見分け方に合わせて同資料の補助標識を組み合わせています。AI生成画像や絵文字は使用していません。
 
 このサイトは学習用教材です。実際の交通では、現地の道路標識・道路標示と交通法規に従ってください。

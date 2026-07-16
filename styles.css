@@ -733,15 +733,14 @@ h1 {
   color: white;
 }
 
-/* Road sign artwork: CSS only, using standard geometric sign shapes. */
+/* Official road sign images extracted from the MLIT road sign chart. */
 .road-sign {
   --sign-size: 210px;
   width: var(--sign-size);
   height: var(--sign-size);
-  position: relative;
-  display: grid;
-  place-items: center;
+  display: block;
   flex: 0 0 auto;
+  object-fit: contain;
 }
 
 .road-sign.is-medium {
