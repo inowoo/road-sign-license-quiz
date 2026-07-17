@@ -71,10 +71,15 @@
             <p id="question-prompt" class="question-prompt">この標識の意味は？</p>
             <div id="question-visual" class="question-visual" aria-live="polite"></div>
             <p id="question-detail" class="question-detail"></p>
+            <div id="question-history" class="question-history" aria-label="この標識の過去成績" hidden></div>
           </div>
 
           <div class="answer-area">
-            <p class="answer-label">答えを1つ選んでください</p>
+            <div class="answer-heading">
+              <p class="answer-label">答えを1つ選んでください</p>
+              <button id="hint-button" class="hint-button" type="button">ヒントを見る</button>
+            </div>
+            <div id="hint-panel" class="hint-panel" role="status" aria-live="polite" hidden></div>
             <div id="answer-options" class="answer-grid"></div>
             <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
             <button id="next-button" class="primary-button" type="button" hidden>
@@ -85,7 +90,7 @@
         </article>
 
         <div class="quiz-footer">
-          <p><span class="review-dot" aria-hidden="true"></span>間違えた標識は、次の出題で優先されます。</p>
+          <p><span class="review-dot" aria-hidden="true"></span>間違えた標識とヒントを使った標識は、復習として再出題されます。</p>
           <button id="reset-button" class="text-button" type="button">学習履歴をリセット</button>
         </div>
       </div>
