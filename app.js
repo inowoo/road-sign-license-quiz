@@ -212,11 +212,14 @@
       button.dataset.signId = option.id;
 
       if (mode === "sign-to-meaning") {
-        button.innerHTML = '<span class="answer-index">' + labels[index] + "</span><span>" + option.meaning + "</span>";
-      } else {
-        button.setAttribute("aria-label", labels[index] + "の標識を選ぶ");
         button.innerHTML = '<span class="answer-index">' + labels[index] + "</span>" +
-          window.createSignMarkup(option, "small", true);
+          '<span class="answer-copy"><strong>' + escapeHtml(option.name) + "</strong>" +
+          "<span>" + escapeHtml(option.meaning) + "</span></span>";
+      } else {
+        button.setAttribute("aria-label", labels[index] + " " + option.name + "の標識を選ぶ");
+        button.innerHTML = '<span class="answer-index">' + labels[index] + "</span>" +
+          '<span class="visual-answer-content">' + window.createSignMarkup(option, "small", true) +
+          '<strong class="visual-answer-name">' + escapeHtml(option.name) + "</strong></span>";
       }
 
       button.addEventListener("click", () => answerQuestion(option.id));
