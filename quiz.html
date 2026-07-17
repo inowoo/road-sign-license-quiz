@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fffdf7">
+  <meta name="description" content="日本の道路標識を、正式名称・意味・適用条件まで学べる安全運転学習クイズです。">
+  <title>道路標識トレーニング | DRIVE READY</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">学習画面へ移動</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="DRIVE READY ホーム">
+        <span class="brand-mark" aria-hidden="true"><span></span></span>
+        <span>
+          <strong>DRIVE READY</strong>
+          <small>安全運転ラーニング</small>
+        </span>
+      </a>
+      <nav class="main-nav" aria-label="メインメニュー">
+        <a class="nav-button" href="index.html" data-short-label="ホーム">ホーム</a>
+        <a class="nav-button is-active" href="quiz.html" data-short-label="標識" aria-current="page">道路標識</a>
+        <a class="nav-button" href="street-view-drive.html" data-short-label="ドライブ">疑似ドライブ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section id="quiz-view" class="view is-active" aria-labelledby="quiz-title">
+      <div class="page-shell quiz-layout">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">ROAD SIGN PRACTICE</p>
+            <h1 id="quiz-title">見て、選んで、身につける。</h1>
+          </div>
+          <fieldset class="mode-switch" aria-label="出題モード">
+            <legend class="sr-only">出題モード</legend>
+            <label>
+              <input type="radio" name="quiz-mode" value="sign-to-meaning" checked>
+              <span>標識 → 意味</span>
+            </label>
+            <label>
+              <input type="radio" name="quiz-mode" value="meaning-to-sign">
+              <span>意味 → 標識</span>
+            </label>
+          </fieldset>
+        </div>
+
+        <div class="local-nav" aria-label="道路標識メニュー">
+          <button class="local-nav-button is-active" type="button" data-view="quiz" aria-current="page">4択クイズ</button>
+          <button class="local-nav-button" type="button" data-view="catalog">標識一覧</button>
+        </div>
+
+        <div class="stats-strip" aria-label="学習状況">
+          <div class="stat-item">
+            <span>問題</span>
+            <strong id="question-number">第1問</strong>
+          </div>
+          <div class="stat-item">
+            <span>正解数</span>
+            <strong id="correct-count">0</strong>
+          </div>
+          <div class="stat-item streak-stat">
+            <span>連続正解</span>
+            <strong id="streak-count">0</strong>
+          </div>
+          <div class="stat-item">
+            <span>習得度</span>
+            <strong id="mastery-rate">0%</strong>
+          </div>
+        </div>
+
+        <article class="quiz-panel" aria-labelledby="question-prompt">
+          <div class="quiz-stage">
+            <p id="question-prompt" class="question-prompt">この標識の意味は？</p>
+            <div id="question-visual" class="question-visual" aria-live="polite"></div>
+            <p id="question-detail" class="question-detail"></p>
+            <div id="question-history" class="question-history" aria-label="この標識の過去成績" hidden></div>
+          </div>
+
+          <div class="answer-area">
+            <div class="answer-heading">
+              <p class="answer-label">答えを1つ選んでください</p>
+              <button id="hint-button" class="hint-button" type="button">ヒントを見る</button>
+            </div>
+            <div id="hint-panel" class="hint-panel" role="status" aria-live="polite" hidden></div>
+            <div id="answer-options" class="answer-grid"></div>
+            <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+            <button id="next-button" class="primary-button" type="button" hidden>
+              次の問題へ
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
+
+        <div class="quiz-footer">
+          <p><span class="review-dot" aria-hidden="true"></span>間違えた標識とヒントを使った標識は、復習として再出題されます。</p>
+          <button id="reset-button" class="text-button" type="button">学習履歴をリセット</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="catalog-view" class="view" aria-labelledby="catalog-title" hidden>
+      <div class="page-shell catalog-layout">
+        <div class="catalog-header">
+          <div>
+            <p class="eyebrow">SIGN CATALOG</p>
+            <h1 id="catalog-title">標識一覧</h1>
+            <p class="catalog-lead"><span id="catalog-count">40</span>種類の標識を、正式名称と意味で確認できます。</p>
+          </div>
+          <label class="search-field">
+            <span class="sr-only">標識を検索</span>
+            <span aria-hidden="true">⌕</span>
+            <input id="catalog-search" type="search" inputmode="search" placeholder="名称や意味で検索">
+          </label>
+        </div>
+
+        <div class="filter-bar" role="group" aria-label="標識の種類で絞り込み">
+          <button type="button" class="filter-button is-active" data-category="all">すべて</button>
+          <button type="button" class="filter-button" data-category="規制標識">規制標識</button>
+          <button type="button" class="filter-button" data-category="指示標識">指示標識</button>
+        </div>
+        <div id="catalog-grid" class="catalog-grid"></div>
+        <p id="catalog-empty" class="empty-state" hidden>条件に合う標識がありません。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-shell footer-inner">
+      <p>標識図版・名称は国土交通省の公的資料に基づいています。実際の運転では現地の標識・標示に従ってください。</p>
+      <div>
+        <a href="https://www.npa.go.jp/bureau/traffic/20241113kyousoku.pdf" target="_blank" rel="noopener noreferrer">警察庁「交通の方法に関する教則」</a>
+        <a href="https://www.mlit.go.jp/road/sign/sign/douro/ichiran.pdf" target="_blank" rel="noopener noreferrer">国土交通省「道路標識一覧」</a>
+      </div>
+    </div>
+  </footer>
+
+  <dialog id="reset-dialog" class="reset-dialog">
+    <form method="dialog">
+      <h2>学習履歴をリセットしますか？</h2>
+      <p>正解数、連続正解数、間違えた問題の記録がすべて消去されます。</p>
+      <div class="dialog-actions">
+        <button class="secondary-button" value="cancel">キャンセル</button>
+        <button id="confirm-reset" class="danger-button" value="confirm">リセット</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="signs.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

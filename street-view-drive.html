@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fffdf7">
+  <meta name="description" content="京都のコースを走りながら、標識や危険予測を学ぶStreet View疑似ドライブのプロトタイプです。">
+  <title>StreetViewDrive | DRIVE READY</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="drive.css">
+</head>
+<body class="drive-body">
+  <a class="skip-link" href="#main-content">疑似ドライブへ移動</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="DRIVE READY ホーム">
+        <span class="brand-mark" aria-hidden="true"><span></span></span>
+        <span><strong>DRIVE READY</strong><small>安全運転ラーニング</small></span>
+      </a>
+      <nav class="main-nav" aria-label="メインメニュー">
+        <a class="nav-button" href="index.html" data-short-label="ホーム">ホーム</a>
+        <a class="nav-button" href="quiz.html" data-short-label="標識">道路標識</a>
+        <a class="nav-button is-active" href="street-view-drive.html" data-short-label="ドライブ" aria-current="page">疑似ドライブ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="page-shell drive-layout">
+    <div class="drive-heading">
+      <div>
+        <p class="eyebrow">STREET VIEW DRIVE / PROTOTYPE</p>
+        <h1 id="route-name">コースを読み込み中</h1>
+        <p id="route-description">安全な判断を、街の流れの中で練習します。</p>
+      </div>
+      <a class="back-link" href="index.html">学習ホームへ</a>
+    </div>
+
+    <section class="drive-scorebar" aria-label="ドライブ成績">
+      <div><span>スコア</span><strong id="drive-score">0</strong></div>
+      <div><span>コンボ</span><strong id="drive-combo">0</strong></div>
+      <div><span>ランク</span><strong id="drive-rank">C</strong></div>
+      <div class="course-progress-stat">
+        <span>コース進捗</span>
+        <strong id="progress-label">0 / 3</strong>
+        <div class="course-progress"><span id="course-progress"></span></div>
+      </div>
+    </section>
+
+    <div class="drive-game-layout">
+      <section class="panorama-panel" aria-labelledby="panorama-title">
+        <div class="panel-heading">
+          <div><span id="drive-status-dot" class="status-dot"></span><strong id="panorama-title">Street View表示領域</strong></div>
+          <span id="drive-status">出発前</span>
+        </div>
+        <div id="street-view-area" class="street-view-area" aria-live="polite">
+          <div class="sky-strip"></div>
+          <div class="building-row building-left">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="building-row building-right">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="road-plane"><span></span></div>
+          <img class="scene-sign" src="assets/signs/no-parking-stopping.png" alt="駐停車禁止">
+          <div class="street-view-placeholder">
+            <span id="scene-kicker">API接続前のプレビュー</span>
+            <strong id="scene-title">烏丸御池駅からスタート</strong>
+            <p id="scene-description">Google Maps API導入後、この領域をStreet Viewパノラマに置き換えます。</p>
+          </div>
+          <div class="mini-map" aria-label="コースのミニマップ">
+            <div class="map-title">ROUTE MAP</div>
+            <div id="map-route" class="map-route"></div>
+          </div>
+        </div>
+        <div class="drive-controls">
+          <div class="location-readout">
+            <span>現在地</span>
+            <strong id="current-location">烏丸御池駅</strong>
+          </div>
+          <button id="drive-action" class="drive-action" type="button">走行開始</button>
+        </div>
+      </section>
+
+      <aside class="learning-console" aria-labelledby="console-title">
+        <div class="console-heading">
+          <div><span>LEARNING CONSOLE</span><h2 id="console-title">チェックポイント</h2></div>
+          <span id="checkpoint-badge">READY</span>
+        </div>
+
+        <div id="question-idle" class="question-idle">
+          <strong>安全確認をして出発</strong>
+          <p>チェックポイントに到着すると、場面に応じた問題が表示されます。</p>
+        </div>
+
+        <div id="drive-question" class="drive-question" hidden>
+          <p id="question-type" class="question-type"></p>
+          <h3 id="drive-question-prompt"></h3>
+          <div id="drive-options" class="drive-options"></div>
+          <div id="drive-explanation" class="drive-explanation" role="status" aria-live="polite" hidden></div>
+        </div>
+
+        <div class="checkpoint-list-wrap">
+          <h3>コース進行</h3>
+          <ol id="checkpoint-list" class="checkpoint-list"></ol>
+        </div>
+      </aside>
+    </div>
+
+    <section class="prototype-note" aria-labelledby="prototype-title">
+      <div>
+        <p class="eyebrow">EXTENSIBLE BY DESIGN</p>
+        <h2 id="prototype-title">コースと問題はJSONで交換できます。</h2>
+      </div>
+      <p><code>Route</code>、<code>Checkpoint</code>、<code>Question</code>を分離し、標識・交通法規・危険予測・右左折・車線変更・事故対応などを同じ進行エンジンへ追加できる構成です。</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-shell footer-inner">
+      <p>この画面はStreet View API接続前の学習プロトタイプです。地点・進行はデモ用データです。</p>
+      <div><a href="index.html">学習ホーム</a><a href="quiz.html">道路標識</a></div>
+    </div>
+  </footer>
+
+  <script src="street-view-drive.js"></script>
+</body>
+</html>

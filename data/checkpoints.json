@@ -1,0 +1,35 @@
+[
+  {
+    "id": "cp-shijo-karasuma",
+    "routeId": "kyoto-central-01",
+    "order": 1,
+    "name": "四条烏丸",
+    "location": { "lat": 35.0037, "lng": 135.7595 },
+    "heading": 180,
+    "questionId": "drive-sign-time-01",
+    "type": "road-sign",
+    "sceneLabel": "時間指定のある駐停車禁止標識"
+  },
+  {
+    "id": "cp-karasuma-shichijo",
+    "routeId": "kyoto-central-01",
+    "order": 2,
+    "name": "烏丸七条",
+    "location": { "lat": 34.9899, "lng": 135.7591 },
+    "heading": 180,
+    "questionId": "drive-hazard-left-turn-01",
+    "type": "hazard-prediction",
+    "sceneLabel": "左折先の横断歩道と自転車"
+  },
+  {
+    "id": "cp-kyoto-station",
+    "routeId": "kyoto-central-01",
+    "order": 3,
+    "name": "京都駅前",
+    "location": { "lat": 34.9858, "lng": 135.7588 },
+    "heading": 180,
+    "questionId": "drive-lane-change-01",
+    "type": "lane-change",
+    "sceneLabel": "交通量の多い場所での進路変更"
+  }
+]

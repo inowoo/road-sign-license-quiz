@@ -164,11 +164,14 @@ a {
   min-width: 92px;
   min-height: 48px;
   padding: 0 14px;
+  display: grid;
+  place-items: center;
   border: 0;
   border-bottom: 3px solid transparent;
   background: transparent;
   color: var(--ink-soft);
   font-weight: 800;
+  text-decoration: none;
 }
 
 .nav-button:hover,
@@ -198,6 +201,30 @@ a {
   align-items: end;
   justify-content: space-between;
   gap: 32px;
+}
+
+.local-nav {
+  margin-top: 24px;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.local-nav-button {
+  min-height: 48px;
+  padding: 8px 18px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--ink-soft);
+  font-weight: 900;
+}
+
+.local-nav-button:hover,
+.local-nav-button:focus-visible,
+.local-nav-button.is-active {
+  border-bottom-color: var(--blue);
+  color: var(--blue-deep);
 }
 
 .eyebrow {
@@ -1583,7 +1610,8 @@ h1 {
   }
 
   .brand strong {
-    font-size: 15px;
+    font-size: 13px;
+    white-space: nowrap;
   }
 
   .brand-mark {
@@ -1598,9 +1626,14 @@ h1 {
   }
 
   .nav-button {
-    min-width: 70px;
-    padding: 0 8px;
-    font-size: 14px;
+    min-width: 58px;
+    padding: 0 7px;
+    font-size: 0;
+  }
+
+  .nav-button::after {
+    content: attr(data-short-label);
+    font-size: 13px;
   }
 
   .quiz-layout,

@@ -4,146 +4,164 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#fffdf7">
-  <meta name="description" content="日本の普通自動車免許に向けて、道路標識を4択クイズで学べる予習サイトです。">
-  <title>標識トレーニング | 普通自動車免許の予習</title>
+  <meta name="description" content="教習所へ行く前から免許取得後まで、安全運転を継続して学べる総合学習Webアプリです。">
+  <title>DRIVE READY | 安全運転ラーニング</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="hub.css">
 </head>
-<body>
-  <a class="skip-link" href="#main-content">問題へ移動</a>
+<body class="hub-body">
+  <a class="skip-link" href="#main-content">学習メニューへ移動</a>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="#quiz" aria-label="標識トレーニング ホーム">
+      <a class="brand" href="index.html" aria-label="DRIVE READY ホーム">
         <span class="brand-mark" aria-hidden="true"><span></span></span>
         <span>
-          <strong>標識トレーニング</strong>
-          <small>普通自動車免許の予習</small>
+          <strong>DRIVE READY</strong>
+          <small>安全運転ラーニング</small>
         </span>
       </a>
       <nav class="main-nav" aria-label="メインメニュー">
-        <button class="nav-button is-active" type="button" data-view="quiz" aria-current="page">クイズ</button>
-        <button class="nav-button" type="button" data-view="catalog">標識一覧</button>
+        <a class="nav-button is-active" href="index.html" data-short-label="ホーム" aria-current="page">ホーム</a>
+        <a class="nav-button" href="quiz.html" data-short-label="標識">道路標識</a>
+        <a class="nav-button" href="street-view-drive.html" data-short-label="ドライブ">疑似ドライブ</a>
       </nav>
     </div>
   </header>
 
-  <main id="main-content">
-    <section id="quiz-view" class="view is-active" aria-labelledby="quiz-title">
-      <div class="page-shell quiz-layout">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">ROAD SIGN PRACTICE</p>
-            <h1 id="quiz-title">見て、選んで、身につける。</h1>
-          </div>
-          <fieldset class="mode-switch" aria-label="出題モード">
-            <legend class="sr-only">出題モード</legend>
-            <label>
-              <input type="radio" name="quiz-mode" value="sign-to-meaning" checked>
-              <span>標識 → 意味</span>
-            </label>
-            <label>
-              <input type="radio" name="quiz-mode" value="meaning-to-sign">
-              <span>意味 → 標識</span>
-            </label>
-          </fieldset>
+  <main id="main-content" class="page-shell hub-layout">
+    <section class="welcome-band" aria-labelledby="welcome-title">
+      <div>
+        <p class="eyebrow">TODAY'S GARAGE</p>
+        <h1 id="welcome-title">今日も、安全運転をひとつ。</h1>
+        <p class="welcome-copy">試験の先まで役立つ判断力を、短い練習で積み重ねます。</p>
+      </div>
+      <div class="rank-panel" aria-label="現在のドライバーランク">
+        <span id="rank-name">ルーキー</span>
+        <strong><span id="level-number">1</span><small> LEVEL</small></strong>
+        <div class="xp-track" aria-label="次のレベルまでの経験値">
+          <span id="xp-progress"></span>
         </div>
-
-        <div class="stats-strip" aria-label="学習状況">
-          <div class="stat-item">
-            <span>問題</span>
-            <strong id="question-number">第1問</strong>
-          </div>
-          <div class="stat-item">
-            <span>正解数</span>
-            <strong id="correct-count">0</strong>
-          </div>
-          <div class="stat-item streak-stat">
-            <span>連続正解</span>
-            <strong id="streak-count">0</strong>
-          </div>
-          <div class="stat-item">
-            <span>習得度</span>
-            <strong id="mastery-rate">0%</strong>
-          </div>
-        </div>
-
-        <article class="quiz-panel" aria-labelledby="question-prompt">
-          <div class="quiz-stage">
-            <p id="question-prompt" class="question-prompt">この標識の意味は？</p>
-            <div id="question-visual" class="question-visual" aria-live="polite"></div>
-            <p id="question-detail" class="question-detail"></p>
-            <div id="question-history" class="question-history" aria-label="この標識の過去成績" hidden></div>
-          </div>
-
-          <div class="answer-area">
-            <div class="answer-heading">
-              <p class="answer-label">答えを1つ選んでください</p>
-              <button id="hint-button" class="hint-button" type="button">ヒントを見る</button>
-            </div>
-            <div id="hint-panel" class="hint-panel" role="status" aria-live="polite" hidden></div>
-            <div id="answer-options" class="answer-grid"></div>
-            <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
-            <button id="next-button" class="primary-button" type="button" hidden>
-              次の問題へ
-              <span aria-hidden="true">→</span>
-            </button>
-          </div>
-        </article>
-
-        <div class="quiz-footer">
-          <p><span class="review-dot" aria-hidden="true"></span>間違えた標識とヒントを使った標識は、復習として再出題されます。</p>
-          <button id="reset-button" class="text-button" type="button">学習履歴をリセット</button>
-        </div>
+        <p><b id="xp-current">0</b> / <span id="xp-next">250</span> XP</p>
       </div>
     </section>
 
-    <section id="catalog-view" class="view" aria-labelledby="catalog-title" hidden>
-      <div class="page-shell catalog-layout">
-        <div class="catalog-header">
-          <div>
-            <p class="eyebrow">SIGN CATALOG</p>
-            <h1 id="catalog-title">標識一覧</h1>
-            <p class="catalog-lead"><span id="catalog-count">40</span>種類の標識を、正式名称と意味で確認できます。</p>
-          </div>
-          <label class="search-field">
-            <span class="sr-only">標識を検索</span>
-            <span aria-hidden="true">⌕</span>
-            <input id="catalog-search" type="search" inputmode="search" placeholder="名称や意味で検索">
-          </label>
-        </div>
+    <section class="player-stats" aria-label="学習ステータス">
+      <div><span>総経験値</span><strong id="total-xp">0 XP</strong></div>
+      <div><span>ベストコンボ</span><strong id="best-combo">0</strong></div>
+      <div><span>回答した問題</span><strong id="total-answered">0</strong></div>
+      <div><span>標識習得率</span><strong id="sign-mastery">0%</strong></div>
+    </section>
 
-        <div class="filter-bar" role="group" aria-label="標識の種類で絞り込み">
-          <button type="button" class="filter-button is-active" data-category="all">すべて</button>
-          <button type="button" class="filter-button" data-category="規制標識">規制標識</button>
-          <button type="button" class="filter-button" data-category="指示標識">指示標識</button>
+    <section class="mission-section" aria-labelledby="mission-title">
+      <div class="section-title-row">
+        <div>
+          <p class="eyebrow">DAILY MISSION</p>
+          <h2 id="mission-title">今日のミッション</h2>
         </div>
-        <div id="catalog-grid" class="catalog-grid"></div>
-        <p id="catalog-empty" class="empty-state" hidden>条件に合う標識がありません。</p>
+        <span id="mission-count" class="mission-count">0 / 5</span>
       </div>
+      <div class="mission-band">
+        <div class="mission-sign" aria-hidden="true">
+          <img src="assets/signs/stop.png" alt="">
+        </div>
+        <div class="mission-copy">
+          <strong>道路標識を5種類復習する</strong>
+          <p>見分け方と適用条件まで確認すると、知識が実際の判断につながります。</p>
+          <div class="mission-progress" aria-label="今日のミッション進捗"><span id="mission-progress"></span></div>
+        </div>
+        <a class="command-link" href="quiz.html">標識トレーニングへ <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <section class="drive-launch" aria-labelledby="drive-title">
+      <div class="drive-visual" aria-hidden="true">
+        <div class="route-line"></div>
+        <span class="route-point point-start"></span>
+        <span class="route-point point-mid"></span>
+        <span class="route-point point-end"></span>
+        <div class="route-label start-label">烏丸御池</div>
+        <div class="route-label mid-label">四条烏丸</div>
+        <div class="route-label end-label">京都駅</div>
+        <img src="assets/signs/no-parking-stopping.png" alt="">
+      </div>
+      <div class="drive-launch-copy">
+        <p class="eyebrow">STREET VIEW DRIVE</p>
+        <h2 id="drive-title">京都の街で、判断を練習する。</h2>
+        <p>烏丸御池から京都駅へ。標識や危険場面で止まり、次の行動を考える疑似ドライブです。</p>
+        <div class="route-meta">
+          <span>3.6 km</span><span>3 チェックポイント</span><span>初級</span>
+        </div>
+        <a class="command-link command-link-primary" href="street-view-drive.html">コースを確認 <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <section class="learning-section" aria-labelledby="learning-title">
+      <div class="section-title-row">
+        <div>
+          <p class="eyebrow">LEARNING MAP</p>
+          <h2 id="learning-title">学習メニュー</h2>
+        </div>
+        <p>運転前の準備から、路上での判断、万一の対応まで。</p>
+      </div>
+      <div class="learning-grid">
+        <a class="learning-item is-ready" href="quiz.html">
+          <span class="module-number">01</span>
+          <div><h3>道路標識</h3><p>正式名称、意味、適用条件、似た標識</p></div>
+          <strong>学習する</strong>
+        </a>
+        <article class="learning-item">
+          <span class="module-number">02</span>
+          <div><h3>交通法規</h3><p>優先関係、速度、駐停車、交差点</p></div>
+          <strong>準備中</strong>
+        </article>
+        <article class="learning-item">
+          <span class="module-number">03</span>
+          <div><h3>実技教習の予習</h3><p>発進、停止、右左折、車線変更</p></div>
+          <strong>準備中</strong>
+        </article>
+        <article class="learning-item">
+          <span class="module-number">04</span>
+          <div><h3>危険予測（KYT）</h3><p>見えない危険と早めの判断</p></div>
+          <strong>準備中</strong>
+        </article>
+        <article class="learning-item">
+          <span class="module-number">05</span>
+          <div><h3>事故・故障・トラブル対応</h3><p>停止、通報、救護、二次事故防止</p></div>
+          <strong>準備中</strong>
+        </article>
+        <article class="learning-item">
+          <span class="module-number">06</span>
+          <div><h3>初心者向け運転ノウハウ</h3><p>駐車、合流、夜間、雨天の基本</p></div>
+          <strong>準備中</strong>
+        </article>
+        <article class="learning-item">
+          <span class="module-number">07</span>
+          <div><h3>ベテランドライバーのコツ</h3><p>余裕ある操作と先読みの習慣</p></div>
+          <strong>準備中</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="weak-section" aria-labelledby="weak-title">
+      <div class="section-title-row">
+        <div>
+          <p class="eyebrow">REVIEW QUEUE</p>
+          <h2 id="weak-title">苦手な標識</h2>
+        </div>
+        <a href="quiz.html">復習する</a>
+      </div>
+      <div id="weak-list" class="weak-list" aria-live="polite"></div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="page-shell footer-inner">
-      <p>標識図版・名称は国土交通省の公的資料に基づいています。実際の運転では現地の標識・標示に従ってください。</p>
-      <div>
-        <a href="https://www.npa.go.jp/bureau/traffic/20241113kyousoku.pdf" target="_blank" rel="noopener noreferrer">警察庁「交通の方法に関する教則」</a>
-        <a href="https://www.mlit.go.jp/road/sign/sign/douro/ichiran.pdf" target="_blank" rel="noopener noreferrer">国土交通省「道路標識一覧」</a>
-      </div>
+      <p>安全な運転は、知識と観察と余裕から。実際の交通では現地の規制と交通状況に従ってください。</p>
+      <div><a href="quiz.html">道路標識</a><a href="street-view-drive.html">疑似ドライブ</a></div>
     </div>
   </footer>
 
-  <dialog id="reset-dialog" class="reset-dialog">
-    <form method="dialog">
-      <h2>学習履歴をリセットしますか？</h2>
-      <p>正解数、連続正解数、間違えた問題の記録がすべて消去されます。</p>
-      <div class="dialog-actions">
-        <button class="secondary-button" value="cancel">キャンセル</button>
-        <button id="confirm-reset" class="danger-button" value="confirm">リセット</button>
-      </div>
-    </form>
-  </dialog>
-
   <script src="signs.js"></script>
-  <script src="app.js"></script>
+  <script src="dashboard.js"></script>
 </body>
 </html>

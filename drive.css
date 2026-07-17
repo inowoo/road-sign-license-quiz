@@ -1,0 +1,730 @@
+.drive-body {
+  background: #f5f8f8;
+}
+
+.drive-layout {
+  padding-top: 32px;
+  padding-bottom: 64px;
+}
+
+.drive-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.drive-heading > div > p:not(.eyebrow) {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+}
+
+.back-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.drive-scorebar {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 150px 150px 150px minmax(240px, 1fr);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: white;
+}
+
+.drive-scorebar > div {
+  min-height: 76px;
+  padding: 12px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid var(--line);
+}
+
+.drive-scorebar > div:last-child {
+  border-right: 0;
+}
+
+.drive-scorebar span {
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.drive-scorebar strong {
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+.course-progress-stat {
+  display: grid !important;
+  grid-template-columns: 1fr auto;
+  align-content: center;
+  gap: 2px 18px;
+}
+
+.course-progress {
+  height: 7px;
+  grid-column: 1 / -1;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #e5ecef;
+}
+
+.course-progress span {
+  width: 0;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  background: var(--green);
+  transition: width 240ms ease;
+}
+
+.drive-game-layout {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(350px, 0.75fr);
+  align-items: start;
+  gap: 16px;
+}
+
+.panorama-panel,
+.learning-console {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: white;
+  box-shadow: 0 12px 28px rgba(30, 67, 88, 0.09);
+  overflow: hidden;
+}
+
+.panel-heading,
+.console-heading {
+  min-height: 58px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.panel-heading > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.panel-heading > span {
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 10px;
+  border-radius: 50%;
+  background: #93a3aa;
+}
+
+.status-dot.is-driving {
+  background: var(--green);
+  box-shadow: 0 0 0 4px rgba(22, 131, 101, 0.15);
+}
+
+.status-dot.is-paused,
+.status-dot.is-review {
+  background: #d28a00;
+}
+
+.status-dot.is-complete {
+  background: var(--blue);
+}
+
+.street-view-area {
+  position: relative;
+  min-height: 580px;
+  overflow: hidden;
+  background: #c9e5f1;
+  isolation: isolate;
+}
+
+.sky-strip {
+  position: absolute;
+  inset: 0 0 44%;
+  background: #bfe4f2;
+}
+
+.building-row {
+  position: absolute;
+  z-index: 1;
+  bottom: 38%;
+  width: 38%;
+  height: 42%;
+  display: flex;
+  align-items: end;
+  gap: 5px;
+}
+
+.building-left { left: 0; }
+.building-right { right: 0; transform: scaleX(-1); }
+
+.building-row span {
+  flex: 1;
+  border: 4px solid #586b70;
+  border-bottom: 0;
+  background: #eff2ed;
+}
+
+.building-row span:nth-child(1) { height: 70%; background: #f0d48c; }
+.building-row span:nth-child(2) { height: 100%; background: #dbe6df; }
+.building-row span:nth-child(3) { height: 82%; background: #d8bec0; }
+
+.road-plane {
+  position: absolute;
+  z-index: 2;
+  left: 15%;
+  right: 15%;
+  bottom: -2px;
+  height: 52%;
+  clip-path: polygon(31% 0, 69% 0, 100% 100%, 0 100%);
+  background: #687579;
+}
+
+.road-plane::before,
+.road-plane::after,
+.road-plane span {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 7px;
+  height: 72%;
+  background: #f8e48b;
+  transform-origin: bottom;
+}
+
+.road-plane::before { left: 35%; transform: rotate(5deg); }
+.road-plane::after { right: 35%; transform: rotate(-5deg); }
+.road-plane span { left: calc(50% - 3px); height: 40%; background: white; }
+
+.scene-sign {
+  position: absolute;
+  z-index: 4;
+  top: 32%;
+  right: 18%;
+  width: 92px;
+  height: 92px;
+  object-fit: contain;
+}
+
+.street-view-placeholder {
+  position: absolute;
+  z-index: 6;
+  left: 22px;
+  bottom: 22px;
+  width: min(470px, calc(100% - 230px));
+  padding: 17px 19px;
+  border-left: 5px solid var(--yellow);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.street-view-placeholder span,
+.street-view-placeholder strong {
+  display: block;
+}
+
+.street-view-placeholder span {
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.street-view-placeholder strong {
+  font-size: 20px;
+}
+
+.street-view-placeholder p {
+  margin: 3px 0 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.mini-map {
+  position: absolute;
+  z-index: 7;
+  right: 18px;
+  bottom: 18px;
+  width: 180px;
+  min-height: 190px;
+  padding: 12px;
+  border: 2px solid white;
+  border-radius: 5px;
+  background: rgba(239, 245, 238, 0.95);
+  box-shadow: 0 8px 22px rgba(23, 50, 77, 0.18);
+}
+
+.map-title {
+  color: var(--ink-soft);
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.map-route {
+  position: relative;
+  margin-top: 10px;
+}
+
+.map-route::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 6px;
+  width: 3px;
+  background: #becbc8;
+}
+
+.map-stop {
+  position: relative;
+  z-index: 1;
+  min-height: 34px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.map-stop span {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+  border: 3px solid white;
+  border-radius: 50%;
+  background: #9eaca9;
+  box-shadow: 0 0 0 1px #9eaca9;
+}
+
+.map-stop.is-active span {
+  background: var(--blue);
+  box-shadow: 0 0 0 1px var(--blue);
+}
+
+.map-stop b {
+  color: var(--ink-soft);
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.drive-controls {
+  min-height: 82px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.location-readout span,
+.location-readout strong {
+  display: block;
+}
+
+.location-readout span {
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.drive-action {
+  min-width: 180px;
+  min-height: 52px;
+  padding: 10px 20px;
+  border: 2px solid var(--blue-deep);
+  border-radius: 6px;
+  background: var(--blue-deep);
+  color: white;
+  font-weight: 900;
+}
+
+.drive-action:hover:not(:disabled),
+.drive-action:focus-visible:not(:disabled) {
+  background: var(--blue);
+}
+
+.drive-action:disabled {
+  border-color: #93a3aa;
+  background: #93a3aa;
+}
+
+.learning-console {
+  min-height: 720px;
+}
+
+.console-heading span {
+  color: var(--blue);
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.console-heading h2 {
+  margin: 1px 0 0;
+  font-size: 18px;
+}
+
+.console-heading > span {
+  padding: 3px 7px;
+  border: 1px solid #b8c8ce;
+  border-radius: 4px;
+  color: var(--ink-soft);
+}
+
+.question-idle,
+.drive-question {
+  padding: 24px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.question-idle {
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #f4f8f8;
+  text-align: center;
+}
+
+.question-idle p {
+  margin: 5px 0 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.question-idle[hidden],
+.drive-question[hidden],
+.drive-explanation[hidden] {
+  display: none;
+}
+
+.question-type {
+  margin: 0 0 5px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.drive-question h3 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+.drive-options {
+  display: grid;
+  gap: 8px;
+}
+
+.drive-options button {
+  min-height: 58px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 2px solid var(--line);
+  border-radius: 5px;
+  background: white;
+  color: var(--ink);
+  text-align: left;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.drive-options button:hover:not(:disabled),
+.drive-options button:focus-visible:not(:disabled) {
+  border-color: var(--blue);
+  background: #edf7ff;
+}
+
+.drive-options button > span {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-soft);
+  color: var(--ink-soft);
+  font-size: 11px;
+}
+
+.drive-options button.is-correct {
+  border-color: #1684c5;
+  background: #dff3ff;
+}
+
+.drive-options button.is-wrong {
+  border-color: var(--red);
+  background: var(--red-soft);
+}
+
+.drive-explanation {
+  margin-top: 12px;
+  padding: 12px 13px;
+  border-left: 4px solid var(--green);
+  border-radius: 4px;
+  background: var(--green-soft);
+  font-size: 12px;
+}
+
+.drive-explanation.is-wrong {
+  border-left-color: var(--red);
+  background: var(--red-soft);
+}
+
+.drive-explanation p {
+  margin: 4px 0 8px;
+}
+
+.drive-explanation ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.checkpoint-list-wrap {
+  padding: 20px;
+}
+
+.checkpoint-list-wrap h3 {
+  margin: 0 0 13px;
+  font-size: 14px;
+}
+
+.checkpoint-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checkpoint-list li {
+  position: relative;
+  min-height: 62px;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 10px;
+  color: var(--ink-soft);
+}
+
+.checkpoint-list li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 27px;
+  bottom: 4px;
+  left: 13px;
+  width: 2px;
+  background: var(--line);
+}
+
+.checkpoint-marker {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 2px solid #a9b8bd;
+  border-radius: 50%;
+  background: white;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.checkpoint-list strong,
+.checkpoint-list div > span {
+  display: block;
+}
+
+.checkpoint-list strong {
+  font-size: 13px;
+}
+
+.checkpoint-list div > span {
+  font-size: 10px;
+}
+
+.checkpoint-list li.is-current {
+  color: var(--ink);
+}
+
+.checkpoint-list li.is-current .checkpoint-marker {
+  border-color: #d28a00;
+  background: #fff7dc;
+  color: #624500;
+}
+
+.checkpoint-list li.is-complete .checkpoint-marker {
+  border-color: var(--green);
+  background: var(--green);
+  color: white;
+}
+
+.prototype-note {
+  margin-top: 24px;
+  padding: 28px 30px;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: 36px;
+  border-top: 4px solid var(--yellow);
+  background: white;
+}
+
+.prototype-note h2 {
+  margin: 0;
+  font-size: 23px;
+}
+
+.prototype-note > p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.prototype-note code {
+  color: var(--blue-deep);
+  font-weight: 900;
+}
+
+@media (max-width: 1000px) {
+  .drive-game-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .learning-console {
+    min-height: 0;
+  }
+
+  .checkpoint-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .checkpoint-list li:not(:last-child)::after {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .drive-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .drive-scorebar {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .drive-scorebar > div:nth-child(3) {
+    border-right: 0;
+  }
+
+  .course-progress-stat {
+    min-height: 68px !important;
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--line);
+  }
+
+  .street-view-area {
+    min-height: 520px;
+  }
+
+  .street-view-placeholder {
+    right: 18px;
+    bottom: 222px;
+    width: auto;
+  }
+
+  .mini-map {
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    width: auto;
+    min-height: 178px;
+  }
+
+  .map-route {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .map-route::before {
+    top: 6px;
+    right: 12%;
+    bottom: auto;
+    left: 12%;
+    width: auto;
+    height: 3px;
+  }
+
+  .map-stop {
+    min-height: 76px;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+    text-align: center;
+  }
+
+  .map-stop b {
+    font-size: 9px;
+  }
+
+  .drive-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .drive-action {
+    width: 100%;
+  }
+
+  .prototype-note {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 520px) {
+  .drive-scorebar {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .drive-scorebar > div {
+    min-width: 0;
+    padding: 10px;
+  }
+
+  .drive-scorebar strong {
+    font-size: 18px;
+  }
+
+  .street-view-area {
+    min-height: 560px;
+  }
+
+  .scene-sign {
+    top: 27%;
+    right: 10%;
+    width: 74px;
+    height: 74px;
+  }
+
+  .checkpoint-list {
+    grid-template-columns: 1fr;
+  }
+}

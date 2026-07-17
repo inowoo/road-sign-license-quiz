@@ -1,0 +1,26 @@
+[
+  {
+    "id": "kyoto-central-01",
+    "name": "京都まちなか基礎コース",
+    "description": "烏丸通を南へ進み、標識確認・左折時の危険予測・車線変更を練習する初級コースです。",
+    "start": {
+      "name": "烏丸御池駅",
+      "lat": 35.0106,
+      "lng": 135.7597
+    },
+    "end": {
+      "name": "京都駅",
+      "lat": 34.9858,
+      "lng": 135.7588
+    },
+    "distanceKm": 3.6,
+    "estimatedMinutes": 18,
+    "difficulty": "初級",
+    "checkpointIds": [
+      "cp-shijo-karasuma",
+      "cp-karasuma-shichijo",
+      "cp-kyoto-station"
+    ],
+    "dataStatus": "prototype"
+  }
+]
