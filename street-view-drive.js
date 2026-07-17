@@ -6,6 +6,7 @@
     checkpoints: "data/checkpoints.json",
     questions: "data/drive-questions.json"
   };
+  const mapsApiKey = String(window.DRIVE_READY_CONFIG?.googleMapsApiKey || "").trim();
 
   const state = {
     route: null,
@@ -29,6 +30,8 @@
     progress: document.getElementById("course-progress"),
     status: document.getElementById("drive-status"),
     statusDot: document.getElementById("drive-status-dot"),
+    streetViewFrame: document.getElementById("street-view-frame"),
+    streetViewLoading: document.getElementById("street-view-loading"),
     sceneKicker: document.getElementById("scene-kicker"),
     sceneTitle: document.getElementById("scene-title"),
     sceneDescription: document.getElementById("scene-description"),
@@ -52,6 +55,39 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
+  }
+
+  function buildStreetViewUrl(location, heading) {
+    const url = new URL("https://www.google.com/maps/embed/v1/streetview");
+    url.searchParams.set("key", mapsApiKey);
+    url.searchParams.set("location", location.lat + "," + location.lng);
+    url.searchParams.set("heading", String(heading || 0));
+    url.searchParams.set("pitch", "0");
+    url.searchParams.set("fov", "80");
+    url.searchParams.set("language", "ja");
+    url.searchParams.set("region", "JP");
+    url.searchParams.set("source", "outdoor");
+    url.searchParams.set("auth_referrer_policy", "origin");
+    return url.toString();
+  }
+
+  function showStreetView(location, heading, locationName) {
+    if (!mapsApiKey) {
+      elements.streetViewFrame.hidden = true;
+      elements.streetViewLoading.hidden = false;
+      elements.streetViewLoading.classList.add("is-setup-required");
+      elements.streetViewLoading.innerHTML =
+        "<strong>Google Street Viewの設定が必要です</strong>" +
+        "<p>Maps Embed APIキーを設定すると、ここに実写パノラマが表示されます。</p>";
+      return;
+    }
+
+    elements.streetViewLoading.classList.remove("is-setup-required");
+    elements.streetViewLoading.innerHTML = "<strong>Google Street Viewを読込中</strong><p>実写パノラマを取得しています。</p>";
+    elements.streetViewLoading.hidden = false;
+    elements.streetViewFrame.hidden = false;
+    elements.streetViewFrame.title = "Google Street View: " + locationName;
+    elements.streetViewFrame.src = buildStreetViewUrl(location, heading);
   }
 
   async function loadJson(url) {
@@ -159,6 +195,7 @@
     const checkpoint = state.checkpoints[index];
     const question = state.questions.get(checkpoint.questionId);
     elements.currentLocation.textContent = checkpoint.name;
+    showStreetView(checkpoint.location, checkpoint.heading, checkpoint.name);
     elements.sceneKicker.textContent = "CHECKPOINT " + checkpoint.order;
     elements.sceneTitle.textContent = checkpoint.sceneLabel;
     elements.sceneDescription.textContent = "安全な位置で停止しました。右の問題に回答してください。";
@@ -217,6 +254,7 @@
     state.checkpointIndex = state.checkpoints.length;
     state.answered = true;
     elements.currentLocation.textContent = state.route.end.name;
+    showStreetView(state.route.end, state.route.end.heading || 180, state.route.end.name);
     elements.sceneKicker.textContent = "COURSE COMPLETE";
     elements.sceneTitle.textContent = state.route.end.name + "に到着";
     elements.sceneDescription.textContent = "おつかれさまでした。解説を振り返り、次のドライブへ備えましょう。";
@@ -235,9 +273,10 @@
     state.combo = 0;
     state.answered = false;
     elements.currentLocation.textContent = state.route.start.name;
-    elements.sceneKicker.textContent = "API接続前のプレビュー";
     elements.sceneTitle.textContent = state.route.start.name + "からスタート";
-    elements.sceneDescription.textContent = "Google Maps API導入後、この領域をStreet Viewパノラマに置き換えます。";
+    elements.sceneKicker.textContent = "STREET VIEW";
+    elements.sceneDescription.textContent = "周囲の車、歩行者、自転車、標識を広く確認します。";
+    showStreetView(state.route.start, state.route.start.heading || 180, state.route.start.name);
     elements.question.hidden = true;
     elements.questionIdle.hidden = false;
     elements.questionIdle.innerHTML = "<strong>安全確認をして出発</strong><p>チェックポイントに到着すると、場面に応じた問題が表示されます。</p>";
@@ -252,6 +291,10 @@
     } else if (state.phase === "complete") {
       resetRoute();
     }
+  });
+
+  elements.streetViewFrame.addEventListener("load", () => {
+    elements.streetViewLoading.hidden = true;
   });
 
   Promise.all([

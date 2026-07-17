@@ -53,24 +53,20 @@
           <span id="drive-status">出発前</span>
         </div>
         <div id="street-view-area" class="street-view-area" aria-live="polite">
-          <div class="sky-strip"></div>
-          <div class="building-row building-left">
-            <span></span><span></span><span></span>
+          <iframe id="street-view-frame" class="street-view-frame" title="Google Street View" loading="eager" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" hidden></iframe>
+          <div id="street-view-loading" class="street-view-loading">
+            <strong>Google Street Viewを準備中</strong>
+            <p>実写パノラマを読み込んでいます。</p>
           </div>
-          <div class="building-row building-right">
-            <span></span><span></span><span></span>
-          </div>
-          <div class="road-plane"><span></span></div>
-          <img class="scene-sign" src="assets/signs/no-parking-stopping.png" alt="駐停車禁止">
-          <div class="street-view-placeholder">
-            <span id="scene-kicker">API接続前のプレビュー</span>
-            <strong id="scene-title">烏丸御池駅からスタート</strong>
-            <p id="scene-description">Google Maps API導入後、この領域をStreet Viewパノラマに置き換えます。</p>
-          </div>
-          <div class="mini-map" aria-label="コースのミニマップ">
-            <div class="map-title">ROUTE MAP</div>
-            <div id="map-route" class="map-route"></div>
-          </div>
+        </div>
+        <div class="street-view-status-card">
+          <span id="scene-kicker">STREET VIEW</span>
+          <strong id="scene-title">烏丸御池駅からスタート</strong>
+          <p id="scene-description">周囲の車、歩行者、自転車、標識を広く確認します。</p>
+        </div>
+        <div class="mini-map" aria-label="コースのミニマップ">
+          <div class="map-title">ROUTE MAP</div>
+          <div id="map-route" class="map-route"></div>
         </div>
         <div class="drive-controls">
           <div class="location-readout">
@@ -117,11 +113,12 @@
 
   <footer class="site-footer">
     <div class="page-shell footer-inner">
-      <p>この画面はStreet View API接続前の学習プロトタイプです。地点・進行はデモ用データです。</p>
+      <p>Google Street Viewの実写パノラマを使用する学習プロトタイプです。地点・進行はデモ用データです。</p>
       <div><a href="index.html">学習ホーム</a><a href="quiz.html">道路標識</a></div>
     </div>
   </footer>
 
+  <script src="maps-config.js"></script>
   <script src="street-view-drive.js"></script>
 </body>
 </html>

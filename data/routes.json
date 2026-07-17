@@ -6,12 +6,14 @@
     "start": {
       "name": "烏丸御池駅",
       "lat": 35.0106,
-      "lng": 135.7597
+      "lng": 135.7597,
+      "heading": 180
     },
     "end": {
       "name": "京都駅",
       "lat": 34.9858,
-      "lng": 135.7588
+      "lng": 135.7588,
+      "heading": 180
     },
     "distanceKm": 3.6,
     "estimatedMinutes": 18,

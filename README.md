@@ -28,11 +28,11 @@
 
 - 烏丸御池駅から京都駅までのデモコース
 - 自動走行、チェックポイント停止、出題、解説、走行再開の進行
-- Street View表示予定領域、ミニマップ、問題UI、スコア、コンボ、ランク、進捗
+- Google Street Viewの実写パノラマ、ミニマップ、問題UI、スコア、コンボ、ランク、進捗
 - 道路標識、危険予測、車線変更という異なる問題種別
 - Route、Checkpoint、Questionを分離したJSONデータ
 
-現在の街路表示はGoogle Maps API接続前のダミー画面です。地点・進行データもプロトタイプ用です。
+実写表示にはGoogle Maps Embed APIを使用します。各チェックポイントへ進むと、JSONに保存した緯度・経度・向きに応じてStreet Viewが切り替わります。地点・進行データはプロトタイプ用です。
 
 ## 将来の学習メニュー
 
@@ -54,6 +54,22 @@ python -m http.server 8000
 
 ブラウザで `http://localhost:8000/` を開きます。
 
+リポジトリ内の `maps-config.js` はAPIキーを含まない初期状態です。そのため、ローカルではStreet Viewの設定案内が表示されますが、コース進行と問題回答は確認できます。公開環境ではGitHub ActionsがGitHub Secretから設定ファイルを生成します。
+
+## Google Street Viewの設定
+
+1. Google Cloudでプロジェクトを作成または選択し、必要に応じて請求先アカウントを関連付けます。
+2. **Maps Embed API**を有効にしてAPIキーを作成します。
+3. キーのアプリケーション制限を**ウェブサイト**にし、`https://inowoo.github.io/*` を許可します。
+4. キーのAPI制限を**Maps Embed API**だけにします。
+5. GitHubリポジトリの **Settings → Secrets and variables → Actions** で、`GOOGLE_MAPS_API_KEY` というRepository secretを作成します。
+
+APIキーはブラウザから利用されるため、配信後の通信では確認可能です。Git履歴には保存せず、ウェブサイト制限とAPI制限の両方を必ず設定してください。Maps Embed APIのリクエスト自体は公式ドキュメント上、無料かつ利用回数無制限です。
+
+- [Maps Embed APIの使用量と料金](https://developers.google.com/maps/documentation/embed/usage-and-billing)
+- [Street Viewモードの埋め込み](https://developers.google.com/maps/documentation/embed/embedding-map)
+- [Google Maps PlatformのAPIキー保護](https://developers.google.com/maps/api-security-best-practices)
+
 ## ファイル構成
 
 ```text
@@ -67,7 +83,10 @@ python -m http.server 8000
 ├── dashboard.js               # XP、ランク、苦手分野の集計
 ├── app.js                     # 道路標識クイズの進行と履歴保存
 ├── street-view-drive.js       # コース進行と問題エンジン
+├── maps-config.js             # APIキー未設定時の公開用設定
 ├── signs.js                   # 道路標識問題データ
+├── .github/workflows/
+│   └── deploy-pages.yml       # Secretを反映してPagesへ配信
 ├── data/
 │   ├── routes.json            # コース情報
 │   ├── checkpoints.json       # 停止地点と問題の関連付け
@@ -86,8 +105,8 @@ python -m http.server 8000
 {
   "id": "kyoto-central-01",
   "name": "京都まちなか基礎コース",
-  "start": { "name": "烏丸御池駅", "lat": 35.0106, "lng": 135.7597 },
-  "end": { "name": "京都駅", "lat": 34.9858, "lng": 135.7588 },
+  "start": { "name": "烏丸御池駅", "lat": 35.0106, "lng": 135.7597, "heading": 180 },
+  "end": { "name": "京都駅", "lat": 34.9858, "lng": 135.7588, "heading": 180 },
   "checkpointIds": ["cp-shijo-karasuma"]
 }
 ```
@@ -146,9 +165,9 @@ python -m http.server 8000
 
 ### Phase 3: Google Street View連携
 
-- Google Maps JavaScript APIとStreet View Panoramaの導入
-- 緯度経度、向き、移動間隔を利用したルート自動進行
-- チェックポイントでの停止と問題表示
+- Maps Embed APIによる実写Street Viewとチェックポイント連動
+- 緯度経度と向きを利用したパノラマ切り替え
+- Google Maps JavaScript APIを利用した連続的なルート自動進行
 - 実在地点データの確認、API利用量の管理、利用規約への対応
 
 ### Phase 4: 高度なゲーム学習
@@ -167,9 +186,10 @@ python -m http.server 8000
 ## GitHub Pagesの公開方法
 
 1. GitHubへこのリポジトリをpushします。
-2. リポジトリの **Settings → Pages** を開きます。
-3. Sourceを **Deploy from a branch** にします。
-4. Branchに `main`、フォルダに `/(root)` を指定します。
+2. `GOOGLE_MAPS_API_KEY` Repository secretを登録します。
+3. リポジトリの **Settings → Pages** を開きます。
+4. Sourceを **GitHub Actions** にします。
+5. `Deploy GitHub Pages` workflowの完了を確認します。
 
 ## 公開URL
 
