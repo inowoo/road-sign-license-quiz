@@ -7,7 +7,7 @@
   <meta name="description" content="京都のコースを走りながら、標識や危険予測を学ぶStreet View疑似ドライブのプロトタイプです。">
   <title>StreetViewDrive | DRIVE READY</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="drive.css?v=20260718-9">
+  <link rel="stylesheet" href="drive.css?v=20260718-10">
 </head>
 <body class="drive-body">
   <a class="skip-link" href="#main-content">疑似ドライブへ移動</a>
@@ -98,11 +98,12 @@
         <section id="focus-zoom-panel" class="focus-zoom-panel" aria-labelledby="focus-zoom-title" hidden>
           <div class="focus-zoom-copy">
             <span>FOCUS ZOOM</span>
-            <h2 id="focus-zoom-title">注目部分の拡大</h2>
+            <h2 id="focus-zoom-title">標識部分の切り抜き拡大</h2>
             <strong id="focus-zoom-label"></strong>
           </div>
           <div class="focus-zoom-view">
-            <iframe id="focus-zoom-frame" class="focus-zoom-frame" title="注目する道路標識の拡大Street View" loading="eager" referrerpolicy="strict-origin-when-cross-origin" hidden></iframe>
+            <iframe id="focus-zoom-frame" class="focus-zoom-frame" title="Street Viewから切り抜いた道路標識の拡大画像" loading="eager" tabindex="-1" aria-hidden="true" referrerpolicy="strict-origin-when-cross-origin" hidden></iframe>
+            <div class="focus-crop-frame" aria-hidden="true"></div>
             <div id="focus-zoom-loading" class="focus-zoom-loading"><strong>拡大画像を読込中</strong></div>
           </div>
         </section>
@@ -182,6 +183,6 @@
   </footer>
 
   <script src="maps-config.js"></script>
-  <script src="street-view-drive.js?v=20260718-11"></script>
+  <script src="street-view-drive.js?v=20260718-12"></script>
 </body>
 </html>
