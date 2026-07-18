@@ -181,7 +181,8 @@
   text-align: center;
 }
 
-.street-view-loading.is-setup-required {
+.street-view-loading.is-setup-required,
+.street-view-loading.is-load-failed {
   border: 4px solid #e0b53c;
   background: #fff9e7;
 }

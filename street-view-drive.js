@@ -17,7 +17,8 @@
     combo: 0,
     answered: false,
     phase: "loading",
-    timer: null
+    timer: null,
+    streetViewLoadTimer: null
   };
 
   const elements = {
@@ -72,9 +73,11 @@
   }
 
   function showStreetView(location, heading, locationName) {
+    window.clearTimeout(state.streetViewLoadTimer);
     if (!mapsApiKey) {
       elements.streetViewFrame.hidden = true;
       elements.streetViewLoading.hidden = false;
+      elements.streetViewLoading.classList.remove("is-load-failed");
       elements.streetViewLoading.classList.add("is-setup-required");
       elements.streetViewLoading.innerHTML =
         "<strong>Google Street Viewの設定が必要です</strong>" +
@@ -82,12 +85,21 @@
       return;
     }
 
-    elements.streetViewLoading.classList.remove("is-setup-required");
+    elements.streetViewLoading.classList.remove("is-setup-required", "is-load-failed");
     elements.streetViewLoading.innerHTML = "<strong>Google Street Viewを読込中</strong><p>実写パノラマを取得しています。</p>";
     elements.streetViewLoading.hidden = false;
     elements.streetViewFrame.hidden = false;
     elements.streetViewFrame.title = "Google Street View: " + locationName;
     elements.streetViewFrame.src = buildStreetViewUrl(location, heading);
+    state.streetViewLoadTimer = window.setTimeout(() => {
+      if (elements.streetViewLoading.hidden) {
+        return;
+      }
+      elements.streetViewLoading.classList.add("is-load-failed");
+      elements.streetViewLoading.innerHTML =
+        "<strong>Google Street Viewを読み込めませんでした</strong>" +
+        "<p>コンテンツブロックを解除するか、Safari・Chrome・Edgeでページを開いてください。</p>";
+    }, 12000);
   }
 
   async function loadJson(url) {
@@ -294,6 +306,7 @@
   });
 
   elements.streetViewFrame.addEventListener("load", () => {
+    window.clearTimeout(state.streetViewLoadTimer);
     elements.streetViewLoading.hidden = true;
   });
 
