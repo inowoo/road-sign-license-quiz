@@ -2,9 +2,9 @@
   "use strict";
 
   const DATA_URLS = {
-    routes: "data/routes.json",
-    checkpoints: "data/checkpoints.json",
-    questions: "data/drive-questions.json"
+    routes: "data/routes.json?v=20260718-4",
+    checkpoints: "data/checkpoints.json?v=20260718-4",
+    questions: "data/drive-questions.json?v=20260718-4"
   };
   const mapsApiKey = String(window.DRIVE_READY_CONFIG?.googleMapsApiKey || "").trim();
 
