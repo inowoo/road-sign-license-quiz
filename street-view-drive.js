@@ -2,10 +2,11 @@
   "use strict";
 
   const DATA_URLS = {
-    routes: "data/routes.json?v=20260718-8",
-    checkpoints: "data/checkpoints.json?v=20260718-8",
-    questions: "data/drive-questions.json?v=20260718-8"
+    routes: "data/routes.json?v=20260718-9",
+    checkpoints: "data/checkpoints.json?v=20260718-9",
+    questions: "data/drive-questions.json?v=20260718-9"
   };
+  const CUSTOM_ROUTE_STORAGE_KEY = "driveReadyCustomRouteV1";
   const mapsApiKey = String(window.DRIVE_READY_CONFIG?.googleMapsApiKey || "").trim();
 
   const state = {
@@ -41,6 +42,18 @@
     vehicleLabel: document.getElementById("vehicle-label"),
     navigationInstruction: document.getElementById("navigation-instruction"),
     navigationDetail: document.getElementById("navigation-detail"),
+    focusZoomPanel: document.getElementById("focus-zoom-panel"),
+    focusZoomLabel: document.getElementById("focus-zoom-label"),
+    focusZoomFrame: document.getElementById("focus-zoom-frame"),
+    focusZoomLoading: document.getElementById("focus-zoom-loading"),
+    customRouteForm: document.getElementById("custom-route-form"),
+    customRouteOrigin: document.getElementById("custom-route-origin"),
+    customRouteDestination: document.getElementById("custom-route-destination"),
+    customRouteSwap: document.getElementById("custom-route-swap"),
+    customRoutePreview: document.getElementById("custom-route-preview"),
+    customRouteSummary: document.getElementById("custom-route-summary"),
+    customRouteFrame: document.getElementById("custom-route-frame"),
+    customRouteLoading: document.getElementById("custom-route-loading"),
     sceneKicker: document.getElementById("scene-kicker"),
     sceneTitle: document.getElementById("scene-title"),
     sceneDescription: document.getElementById("scene-description"),
@@ -66,7 +79,8 @@
       .replace(/'/g, "&#039;");
   }
 
-  function buildStreetViewUrl(point, heading) {
+  function buildStreetViewUrl(point, heading, viewOptions) {
+    const view = viewOptions || {};
     const location = getStreetViewLocation(point);
     const url = new URL("https://www.google.com/maps/embed/v1/streetview");
     url.searchParams.set("key", mapsApiKey);
@@ -74,9 +88,9 @@
     if (point.streetViewPano) {
       url.searchParams.set("pano", point.streetViewPano);
     }
-    url.searchParams.set("heading", String(heading || 0));
-    url.searchParams.set("pitch", "0");
-    url.searchParams.set("fov", "80");
+    url.searchParams.set("heading", String(Number.isFinite(Number(view.heading)) ? Number(view.heading) : heading || 0));
+    url.searchParams.set("pitch", String(Number.isFinite(Number(view.pitch)) ? Number(view.pitch) : 0));
+    url.searchParams.set("fov", String(Number.isFinite(Number(view.fov)) ? Number(view.fov) : 80));
     url.searchParams.set("language", "ja");
     url.searchParams.set("region", "JP");
     url.searchParams.set("source", "outdoor");
@@ -98,6 +112,76 @@
     url.searchParams.set("language", "ja");
     url.searchParams.set("region", "JP");
     return url.toString();
+  }
+
+  function buildCustomRouteUrl(origin, destination) {
+    const url = new URL("https://www.google.com/maps/embed/v1/directions");
+    url.searchParams.set("key", mapsApiKey);
+    url.searchParams.set("origin", origin);
+    url.searchParams.set("destination", destination);
+    url.searchParams.set("mode", "driving");
+    url.searchParams.set("units", "metric");
+    url.searchParams.set("language", "ja");
+    url.searchParams.set("region", "JP");
+    return url.toString();
+  }
+
+  function saveCustomRoute(origin, destination) {
+    try {
+      localStorage.setItem(CUSTOM_ROUTE_STORAGE_KEY, JSON.stringify({ origin, destination }));
+    } catch (_error) {
+      // Route preview remains usable when storage is unavailable.
+    }
+  }
+
+  function loadCustomRoute() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(CUSTOM_ROUTE_STORAGE_KEY) || "null");
+      return saved && typeof saved.origin === "string" && typeof saved.destination === "string" ? saved : null;
+    } catch (_error) {
+      return null;
+    }
+  }
+
+  function showCustomRoute(origin, destination, shouldSave) {
+    elements.customRouteSummary.textContent = origin + " → " + destination;
+    elements.customRoutePreview.hidden = false;
+    if (shouldSave) {
+      saveCustomRoute(origin, destination);
+    }
+
+    if (!mapsApiKey) {
+      elements.customRouteFrame.hidden = true;
+      elements.customRouteLoading.hidden = false;
+      elements.customRouteLoading.innerHTML = "<strong>ルート地図にはMaps Embed APIの設定が必要です</strong>";
+      return;
+    }
+
+    elements.customRouteLoading.innerHTML = "<strong>ルート地図を読込中</strong>";
+    elements.customRouteLoading.hidden = false;
+    elements.customRouteFrame.hidden = false;
+    elements.customRouteFrame.src = buildCustomRouteUrl(origin, destination);
+  }
+
+  function hideFocusZoom() {
+    elements.focusZoomPanel.hidden = true;
+    elements.focusZoomFrame.hidden = true;
+    elements.focusZoomLoading.hidden = true;
+  }
+
+  function showFocusZoom(point) {
+    const zoom = point.focusZoom;
+    if (!zoom || !mapsApiKey) {
+      hideFocusZoom();
+      return;
+    }
+
+    elements.focusZoomPanel.hidden = false;
+    elements.focusZoomLabel.textContent = zoom.label || "注目対象";
+    elements.focusZoomLoading.hidden = false;
+    elements.focusZoomFrame.hidden = false;
+    elements.focusZoomFrame.title = "注目部分の拡大Street View: " + (zoom.label || point.name);
+    elements.focusZoomFrame.src = buildStreetViewUrl(point, point.heading, zoom);
   }
 
   function toRadians(degrees) {
@@ -202,6 +286,7 @@
     state.focusAreas = Array.isArray(point.focusAreas) ? point.focusAreas : [];
     elements.focusOverlay.hidden = true;
     elements.focusOverlay.innerHTML = "";
+    showFocusZoom(point);
     if (!mapsApiKey) {
       elements.streetViewFrame.hidden = true;
       elements.streetViewLoading.hidden = false;
@@ -314,6 +399,7 @@
   function startDriving() {
     setPhase("driving");
     clearFocusAreas();
+    hideFocusZoom();
     elements.questionIdle.hidden = false;
     elements.question.hidden = true;
     elements.sceneKicker.textContent = "AUTO DRIVE";
@@ -449,6 +535,30 @@
     elements.vehicleLabel.hidden = false;
   });
 
+  elements.focusZoomFrame.addEventListener("load", () => {
+    elements.focusZoomLoading.hidden = true;
+  });
+
+  elements.customRouteFrame.addEventListener("load", () => {
+    elements.customRouteLoading.hidden = true;
+  });
+
+  elements.customRouteForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const origin = elements.customRouteOrigin.value.trim();
+    const destination = elements.customRouteDestination.value.trim();
+    if (!origin || !destination) {
+      return;
+    }
+    showCustomRoute(origin, destination, true);
+  });
+
+  elements.customRouteSwap.addEventListener("click", () => {
+    const origin = elements.customRouteOrigin.value;
+    elements.customRouteOrigin.value = elements.customRouteDestination.value;
+    elements.customRouteDestination.value = origin;
+  });
+
   Promise.all([
     loadJson(DATA_URLS.routes),
     loadJson(DATA_URLS.checkpoints),
@@ -459,6 +569,12 @@
       .filter((checkpoint) => checkpoint.routeId === state.route.id)
       .sort((a, b) => a.order - b.order);
     state.questions = new Map(questions.map((question) => [question.id, question]));
+    const savedRoute = loadCustomRoute();
+    elements.customRouteOrigin.value = savedRoute?.origin || "御池高倉交差点, 京都市";
+    elements.customRouteDestination.value = savedRoute?.destination || "京都駅, 京都市";
+    if (savedRoute) {
+      showCustomRoute(savedRoute.origin, savedRoute.destination, false);
+    }
     renderRoute();
     resetRoute();
   }).catch(() => {

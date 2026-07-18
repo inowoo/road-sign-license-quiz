@@ -7,7 +7,7 @@
   <meta name="description" content="京都のコースを走りながら、標識や危険予測を学ぶStreet View疑似ドライブのプロトタイプです。">
   <title>StreetViewDrive | DRIVE READY</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="drive.css?v=20260718-7">
+  <link rel="stylesheet" href="drive.css?v=20260718-9">
 </head>
 <body class="drive-body">
   <a class="skip-link" href="#main-content">疑似ドライブへ移動</a>
@@ -34,6 +34,35 @@
       </div>
       <a class="back-link" href="index.html">学習ホームへ</a>
     </div>
+
+    <section class="route-builder" aria-labelledby="custom-route-title">
+      <div class="route-builder-heading">
+        <p class="eyebrow">FREE ROUTE</p>
+        <h2 id="custom-route-title">自由ルート設定</h2>
+      </div>
+      <form id="custom-route-form" class="custom-route-form">
+        <label for="custom-route-origin">
+          <span>開始地点</span>
+          <input id="custom-route-origin" name="origin" type="text" autocomplete="street-address" required>
+        </label>
+        <button id="custom-route-swap" class="route-swap" type="button" aria-label="開始地点と到着地点を入れ替える" title="開始地点と到着地点を入れ替える">⇅</button>
+        <label for="custom-route-destination">
+          <span>到着地点</span>
+          <input id="custom-route-destination" name="destination" type="text" autocomplete="street-address" required>
+        </label>
+        <button class="custom-route-submit" type="submit">ルート表示</button>
+      </form>
+      <div id="custom-route-preview" class="custom-route-preview" aria-live="polite" hidden>
+        <div class="custom-route-summary">
+          <span>ROUTE PREVIEW</span>
+          <strong id="custom-route-summary"></strong>
+        </div>
+        <div class="custom-route-map">
+          <iframe id="custom-route-frame" class="custom-route-frame" title="指定した開始地点から到着地点までのGoogleマップ" loading="eager" referrerpolicy="strict-origin-when-cross-origin" hidden></iframe>
+          <div id="custom-route-loading" class="custom-route-loading"><strong>ルート地図を準備中</strong></div>
+        </div>
+      </div>
+    </section>
 
     <section class="drive-scorebar" aria-label="ドライブ成績">
       <div><span>スコア</span><strong id="drive-score">0</strong></div>
@@ -65,6 +94,17 @@
           <strong id="scene-title">烏丸御池駅からスタート</strong>
           <p id="scene-description">周囲の車、歩行者、自転車、標識を広く確認します。</p>
         </div>
+        <section id="focus-zoom-panel" class="focus-zoom-panel" aria-labelledby="focus-zoom-title" hidden>
+          <div class="focus-zoom-copy">
+            <span>FOCUS ZOOM</span>
+            <h2 id="focus-zoom-title">注目部分の拡大</h2>
+            <strong id="focus-zoom-label"></strong>
+          </div>
+          <div class="focus-zoom-view">
+            <iframe id="focus-zoom-frame" class="focus-zoom-frame" title="注目する道路標識の拡大Street View" loading="eager" referrerpolicy="strict-origin-when-cross-origin" hidden></iframe>
+            <div id="focus-zoom-loading" class="focus-zoom-loading"><strong>拡大画像を読込中</strong></div>
+          </div>
+        </section>
         <section class="navigation-panel" aria-labelledby="navigation-title">
           <div class="navigation-map">
             <iframe id="navigation-map-frame" class="navigation-map-frame" title="現在地周辺のGoogleマップ" loading="eager" referrerpolicy="strict-origin-when-cross-origin" hidden></iframe>
@@ -141,6 +181,6 @@
   </footer>
 
   <script src="maps-config.js"></script>
-  <script src="street-view-drive.js?v=20260718-8"></script>
+  <script src="street-view-drive.js?v=20260718-9"></script>
 </body>
 </html>

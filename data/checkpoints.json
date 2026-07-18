@@ -9,11 +9,17 @@
     "streetViewPano": "yDE66eAzhG4hQEM0pzpFqw",
     "heading": 180,
     "focusAreas": [
-      { "label": "駐停車禁止標識と補助標識", "left": 31, "top": 34, "width": 13, "height": 21 }
+      { "label": "車両（組合せ）通行止めと補助標識", "left": 31, "top": 34, "width": 13, "height": 21 }
     ],
+    "focusZoom": {
+      "label": "車両（組合せ）通行止め・7-20",
+      "heading": 176,
+      "pitch": -4,
+      "fov": 22
+    },
     "questionId": "drive-sign-time-01",
     "type": "road-sign",
-    "sceneLabel": "時間指定のある駐停車禁止標識"
+    "sceneLabel": "時間指定の車両（組合せ）通行止め"
   },
   {
     "id": "cp-karasuma-shichijo",
