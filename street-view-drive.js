@@ -68,7 +68,6 @@
     url.searchParams.set("language", "ja");
     url.searchParams.set("region", "JP");
     url.searchParams.set("source", "outdoor");
-    url.searchParams.set("auth_referrer_policy", "origin");
     return url.toString();
   }
 
