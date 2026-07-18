@@ -8,6 +8,9 @@
     "streetViewLocation": { "lat": 35.0038611, "lng": 135.763278 },
     "streetViewPano": "yDE66eAzhG4hQEM0pzpFqw",
     "heading": 180,
+    "focusAreas": [
+      { "label": "駐停車禁止標識と補助標識", "left": 31, "top": 34, "width": 13, "height": 21 }
+    ],
     "questionId": "drive-sign-time-01",
     "type": "road-sign",
     "sceneLabel": "時間指定のある駐停車禁止標識"
@@ -21,6 +24,9 @@
     "streetViewLocation": { "lat": 34.9892111, "lng": 135.7632295 },
     "streetViewPano": "cW3NQ3F9G8vFSO9sw2t9gQ",
     "heading": 90,
+    "focusAreas": [
+      { "label": "左側方と横断歩道", "left": 5, "top": 49, "width": 30, "height": 34 }
+    ],
     "questionId": "drive-hazard-left-turn-01",
     "type": "hazard-prediction",
     "sceneLabel": "左折先の横断歩道と自転車"
@@ -34,6 +40,9 @@
     "streetViewLocation": { "lat": 34.9872574, "lng": 135.7611114 },
     "streetViewPano": "8BxXSBlZSH3jIwQ-p8gXig",
     "heading": 270,
+    "focusAreas": [
+      { "label": "進路変更先の車線と周囲の車", "left": 21, "top": 47, "width": 39, "height": 31 }
+    ],
     "questionId": "drive-lane-change-01",
     "type": "lane-change",
     "sceneLabel": "交通量の多い場所での進路変更"

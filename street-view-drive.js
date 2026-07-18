@@ -2,9 +2,9 @@
   "use strict";
 
   const DATA_URLS = {
-    routes: "data/routes.json?v=20260718-6",
-    checkpoints: "data/checkpoints.json?v=20260718-6",
-    questions: "data/drive-questions.json?v=20260718-6"
+    routes: "data/routes.json?v=20260718-7",
+    checkpoints: "data/checkpoints.json?v=20260718-7",
+    questions: "data/drive-questions.json?v=20260718-7"
   };
   const mapsApiKey = String(window.DRIVE_READY_CONFIG?.googleMapsApiKey || "").trim();
 
@@ -18,7 +18,8 @@
     answered: false,
     phase: "loading",
     timer: null,
-    streetViewLoadTimer: null
+    streetViewLoadTimer: null,
+    focusAreas: []
   };
 
   const elements = {
@@ -33,6 +34,13 @@
     statusDot: document.getElementById("drive-status-dot"),
     streetViewFrame: document.getElementById("street-view-frame"),
     streetViewLoading: document.getElementById("street-view-loading"),
+    focusOverlay: document.getElementById("focus-overlay"),
+    navigationMapFrame: document.getElementById("navigation-map-frame"),
+    navigationMapLoading: document.getElementById("navigation-map-loading"),
+    vehicleMarker: document.getElementById("vehicle-marker"),
+    vehicleLabel: document.getElementById("vehicle-label"),
+    navigationInstruction: document.getElementById("navigation-instruction"),
+    navigationDetail: document.getElementById("navigation-detail"),
     sceneKicker: document.getElementById("scene-kicker"),
     sceneTitle: document.getElementById("scene-title"),
     sceneDescription: document.getElementById("scene-description"),
@@ -80,8 +88,120 @@
     return point.streetViewLocation || point.location || point;
   }
 
+  function buildNavigationMapUrl(point) {
+    const location = getStreetViewLocation(point);
+    const url = new URL("https://www.google.com/maps/embed/v1/view");
+    url.searchParams.set("key", mapsApiKey);
+    url.searchParams.set("center", location.lat + "," + location.lng);
+    url.searchParams.set("zoom", "17");
+    url.searchParams.set("maptype", "roadmap");
+    url.searchParams.set("language", "ja");
+    url.searchParams.set("region", "JP");
+    return url.toString();
+  }
+
+  function toRadians(degrees) {
+    return degrees * Math.PI / 180;
+  }
+
+  function getRouteMetrics(fromPoint, toPoint) {
+    const from = getStreetViewLocation(fromPoint);
+    const to = getStreetViewLocation(toPoint);
+    const fromLat = toRadians(from.lat);
+    const toLat = toRadians(to.lat);
+    const deltaLat = toRadians(to.lat - from.lat);
+    const deltaLng = toRadians(to.lng - from.lng);
+    const haversine = Math.sin(deltaLat / 2) ** 2 +
+      Math.cos(fromLat) * Math.cos(toLat) * Math.sin(deltaLng / 2) ** 2;
+    const distanceKm = 6371 * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
+    const y = Math.sin(deltaLng) * Math.cos(toLat);
+    const x = Math.cos(fromLat) * Math.sin(toLat) -
+      Math.sin(fromLat) * Math.cos(toLat) * Math.cos(deltaLng);
+    const bearing = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+    return { distanceKm, bearing };
+  }
+
+  function getDirectionLabel(bearing) {
+    const labels = ["北", "北東", "東", "南東", "南", "南西", "西", "北西"];
+    return labels[Math.round(bearing / 45) % labels.length];
+  }
+
+  function formatDistance(distanceKm) {
+    return distanceKm < 1
+      ? Math.max(10, Math.round(distanceKm * 1000 / 10) * 10) + " m"
+      : distanceKm.toFixed(1) + " km";
+  }
+
+  function renderFocusAreas() {
+    if (!state.focusAreas.length) {
+      elements.focusOverlay.hidden = true;
+      elements.focusOverlay.innerHTML = "";
+      return;
+    }
+
+    elements.focusOverlay.innerHTML = state.focusAreas.map((area) => {
+      const left = Math.max(0, Math.min(94, Number(area.left) || 0));
+      const top = Math.max(0, Math.min(90, Number(area.top) || 0));
+      const width = Math.max(6, Math.min(70, Number(area.width) || 12));
+      const height = Math.max(8, Math.min(70, Number(area.height) || 16));
+      return '<div class="focus-area" style="--focus-left:' + left +
+        '%;--focus-top:' + top + '%;--focus-width:' + width +
+        '%;--focus-height:' + height + '%"><span>' + escapeHtml(area.label) + "</span></div>";
+    }).join("");
+    elements.focusOverlay.hidden = false;
+  }
+
+  function clearFocusAreas() {
+    state.focusAreas = [];
+    renderFocusAreas();
+  }
+
+  function updateNavigation(point, nextPoint) {
+    let bearing = 0;
+    let isArrived = true;
+
+    if (nextPoint) {
+      const metrics = getRouteMetrics(point, nextPoint);
+      if (metrics.distanceKm >= 0.01) {
+        bearing = metrics.bearing;
+        isArrived = false;
+        elements.navigationInstruction.textContent = getDirectionLabel(bearing) + "へ進む";
+        elements.navigationDetail.textContent = "次の地点: " + nextPoint.name + " / 約 " + formatDistance(metrics.distanceKm);
+      } else {
+        elements.navigationInstruction.textContent = "この地点で最終確認";
+        elements.navigationDetail.textContent = "回答後にコース完了です。";
+      }
+    } else {
+      elements.navigationInstruction.textContent = "目的地に到着";
+      elements.navigationDetail.textContent = point.name + "でコース完了です。";
+    }
+
+    elements.vehicleMarker.style.setProperty("--travel-heading", bearing + "deg");
+    elements.vehicleMarker.classList.toggle("is-arrived", isArrived);
+
+    if (!mapsApiKey) {
+      elements.navigationMapFrame.hidden = true;
+      elements.vehicleMarker.hidden = true;
+      elements.vehicleLabel.hidden = true;
+      elements.navigationMapLoading.hidden = false;
+      elements.navigationMapLoading.innerHTML = "<strong>地図表示にはMaps Embed APIの設定が必要です</strong>";
+      return;
+    }
+
+    elements.navigationMapLoading.innerHTML = "<strong>周辺地図を読込中</strong>";
+    elements.navigationMapLoading.hidden = false;
+    elements.vehicleMarker.hidden = true;
+    elements.vehicleLabel.hidden = true;
+    elements.navigationMapFrame.hidden = false;
+    elements.navigationMapFrame.title = "現在地周辺のGoogleマップ: " + point.name;
+    elements.navigationMapFrame.src = buildNavigationMapUrl(point);
+  }
+
   function showStreetView(point, heading, locationName) {
     window.clearTimeout(state.streetViewLoadTimer);
+    state.focusAreas = Array.isArray(point.focusAreas) ? point.focusAreas : [];
+    elements.focusOverlay.hidden = true;
+    elements.focusOverlay.innerHTML = "";
     if (!mapsApiKey) {
       elements.streetViewFrame.hidden = true;
       elements.streetViewLoading.hidden = false;
@@ -193,6 +313,7 @@
 
   function startDriving() {
     setPhase("driving");
+    clearFocusAreas();
     elements.questionIdle.hidden = false;
     elements.question.hidden = true;
     elements.sceneKicker.textContent = "AUTO DRIVE";
@@ -216,6 +337,7 @@
     const question = state.questions.get(checkpoint.questionId);
     elements.currentLocation.textContent = checkpoint.name;
     showStreetView(checkpoint, checkpoint.heading, checkpoint.name);
+    updateNavigation(checkpoint, state.checkpoints[index + 1] || state.route.end);
     elements.sceneKicker.textContent = "CHECKPOINT " + checkpoint.order;
     elements.sceneTitle.textContent = checkpoint.sceneLabel;
     elements.sceneDescription.textContent = "安全な位置で停止しました。右の問題に回答してください。";
@@ -275,6 +397,7 @@
     state.answered = true;
     elements.currentLocation.textContent = state.route.end.name;
     showStreetView(state.route.end, state.route.end.heading || 180, state.route.end.name);
+    updateNavigation(state.route.end, null);
     elements.sceneKicker.textContent = "COURSE COMPLETE";
     elements.sceneTitle.textContent = state.route.end.name + "に到着";
     elements.sceneDescription.textContent = "おつかれさまでした。解説を振り返り、次のドライブへ備えましょう。";
@@ -297,6 +420,7 @@
     elements.sceneKicker.textContent = "STREET VIEW";
     elements.sceneDescription.textContent = "周囲の車、歩行者、自転車、標識を広く確認します。";
     showStreetView(state.route.start, state.route.start.heading || 180, state.route.start.name);
+    updateNavigation(state.route.start, state.checkpoints[0]);
     elements.question.hidden = true;
     elements.questionIdle.hidden = false;
     elements.questionIdle.innerHTML = "<strong>安全確認をして出発</strong><p>チェックポイントに到着すると、場面に応じた問題が表示されます。</p>";
@@ -316,6 +440,13 @@
   elements.streetViewFrame.addEventListener("load", () => {
     window.clearTimeout(state.streetViewLoadTimer);
     elements.streetViewLoading.hidden = true;
+    renderFocusAreas();
+  });
+
+  elements.navigationMapFrame.addEventListener("load", () => {
+    elements.navigationMapLoading.hidden = true;
+    elements.vehicleMarker.hidden = false;
+    elements.vehicleLabel.hidden = false;
   });
 
   Promise.all([

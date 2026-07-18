@@ -7,7 +7,7 @@
   <meta name="description" content="京都のコースを走りながら、標識や危険予測を学ぶStreet View疑似ドライブのプロトタイプです。">
   <title>StreetViewDrive | DRIVE READY</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="drive.css?v=20260718-5">
+  <link rel="stylesheet" href="drive.css?v=20260718-7">
 </head>
 <body class="drive-body">
   <a class="skip-link" href="#main-content">疑似ドライブへ移動</a>
@@ -58,12 +58,34 @@
             <strong>Google Street Viewを準備中</strong>
             <p>実写パノラマを読み込んでいます。</p>
           </div>
+          <div id="focus-overlay" class="focus-overlay" aria-hidden="true" hidden></div>
         </div>
         <div class="street-view-status-card">
           <span id="scene-kicker">STREET VIEW</span>
           <strong id="scene-title">烏丸御池駅からスタート</strong>
           <p id="scene-description">周囲の車、歩行者、自転車、標識を広く確認します。</p>
         </div>
+        <section class="navigation-panel" aria-labelledby="navigation-title">
+          <div class="navigation-map">
+            <iframe id="navigation-map-frame" class="navigation-map-frame" title="現在地周辺のGoogleマップ" loading="eager" referrerpolicy="strict-origin-when-cross-origin" hidden></iframe>
+            <div id="navigation-map-loading" class="navigation-map-loading">
+              <strong>周辺地図を準備中</strong>
+            </div>
+            <div id="vehicle-marker" class="vehicle-marker" aria-hidden="true" hidden>
+              <span class="vehicle-route-line"></span>
+              <span class="vehicle-route-arrow"></span>
+              <span class="vehicle-position"></span>
+            </div>
+            <span id="vehicle-label" class="vehicle-label" hidden>自車</span>
+            <span class="map-north" aria-hidden="true">N</span>
+          </div>
+          <div class="navigation-copy">
+            <span>LIVE NAVIGATION</span>
+            <h2 id="navigation-title">周辺地図</h2>
+            <strong id="navigation-instruction">現在地を確認中</strong>
+            <p id="navigation-detail">次の地点を読み込んでいます。</p>
+          </div>
+        </section>
         <div class="mini-map" aria-label="コースのミニマップ">
           <div class="map-title">ROUTE MAP</div>
           <div id="map-route" class="map-route"></div>
@@ -119,6 +141,6 @@
   </footer>
 
   <script src="maps-config.js"></script>
-  <script src="street-view-drive.js?v=20260718-6"></script>
+  <script src="street-view-drive.js?v=20260718-7"></script>
 </body>
 </html>
