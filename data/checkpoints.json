@@ -25,11 +25,11 @@
     "streetViewPano": "cW3NQ3F9G8vFSO9sw2t9gQ",
     "heading": 90,
     "focusAreas": [
-      { "label": "左側方と横断歩道", "left": 5, "top": 49, "width": 30, "height": 34 }
+      { "label": "左側方の死角と接近車両", "left": 5, "top": 49, "width": 30, "height": 34 }
     ],
     "questionId": "drive-hazard-left-turn-01",
     "type": "hazard-prediction",
-    "sceneLabel": "左折先の横断歩道と自転車"
+    "sceneLabel": "左折前の左側方と死角"
   },
   {
     "id": "cp-kyoto-station",
