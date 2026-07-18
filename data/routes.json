@@ -4,16 +4,24 @@
     "name": "京都まちなか基礎コース",
     "description": "烏丸通を南へ進み、標識確認・左折時の危険予測・車線変更を練習する初級コースです。",
     "start": {
-      "name": "烏丸御池駅",
+      "name": "烏丸御池駅南側・烏丸通",
       "lat": 35.0106,
       "lng": 135.7597,
+      "streetViewLocation": {
+        "lat": 35.00905,
+        "lng": 135.75965
+      },
       "heading": 180
     },
     "end": {
-      "name": "京都駅",
+      "name": "京都駅前・塩小路通",
       "lat": 34.9858,
       "lng": 135.7588,
-      "heading": 180
+      "streetViewLocation": {
+        "lat": 34.987243,
+        "lng": 135.761087
+      },
+      "heading": 270
     },
     "distanceKm": 3.6,
     "estimatedMinutes": 18,

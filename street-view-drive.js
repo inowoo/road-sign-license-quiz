@@ -68,7 +68,12 @@
     url.searchParams.set("language", "ja");
     url.searchParams.set("region", "JP");
     url.searchParams.set("source", "outdoor");
+    url.searchParams.set("radius", "50");
     return url.toString();
+  }
+
+  function getStreetViewLocation(point) {
+    return point.streetViewLocation || point.location || point;
   }
 
   function showStreetView(location, heading, locationName) {
@@ -206,7 +211,7 @@
     const checkpoint = state.checkpoints[index];
     const question = state.questions.get(checkpoint.questionId);
     elements.currentLocation.textContent = checkpoint.name;
-    showStreetView(checkpoint.location, checkpoint.heading, checkpoint.name);
+    showStreetView(getStreetViewLocation(checkpoint), checkpoint.heading, checkpoint.name);
     elements.sceneKicker.textContent = "CHECKPOINT " + checkpoint.order;
     elements.sceneTitle.textContent = checkpoint.sceneLabel;
     elements.sceneDescription.textContent = "安全な位置で停止しました。右の問題に回答してください。";
@@ -265,7 +270,7 @@
     state.checkpointIndex = state.checkpoints.length;
     state.answered = true;
     elements.currentLocation.textContent = state.route.end.name;
-    showStreetView(state.route.end, state.route.end.heading || 180, state.route.end.name);
+    showStreetView(getStreetViewLocation(state.route.end), state.route.end.heading || 180, state.route.end.name);
     elements.sceneKicker.textContent = "COURSE COMPLETE";
     elements.sceneTitle.textContent = state.route.end.name + "に到着";
     elements.sceneDescription.textContent = "おつかれさまでした。解説を振り返り、次のドライブへ備えましょう。";
@@ -287,7 +292,7 @@
     elements.sceneTitle.textContent = state.route.start.name + "からスタート";
     elements.sceneKicker.textContent = "STREET VIEW";
     elements.sceneDescription.textContent = "周囲の車、歩行者、自転車、標識を広く確認します。";
-    showStreetView(state.route.start, state.route.start.heading || 180, state.route.start.name);
+    showStreetView(getStreetViewLocation(state.route.start), state.route.start.heading || 180, state.route.start.name);
     elements.question.hidden = true;
     elements.questionIdle.hidden = false;
     elements.questionIdle.innerHTML = "<strong>安全確認をして出発</strong><p>チェックポイントに到着すると、場面に応じた問題が表示されます。</p>";
