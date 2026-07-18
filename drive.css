@@ -499,14 +499,12 @@
 
 .focus-zoom-frame {
   position: absolute;
-  top: calc(50% - var(--focus-crop-y, 50%));
-  left: calc(50% - var(--focus-crop-x, 50%));
-  width: 100%;
-  height: 100%;
+  top: var(--focus-crop-top, -125%);
+  left: var(--focus-crop-left, -125%);
+  width: var(--focus-crop-size, 350%);
+  height: var(--focus-crop-size, 350%);
   border: 0;
   pointer-events: none;
-  transform: scale(var(--focus-crop-scale, 3.5));
-  transform-origin: var(--focus-crop-x, 50%) var(--focus-crop-y, 50%);
 }
 
 .focus-crop-frame {

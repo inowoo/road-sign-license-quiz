@@ -195,9 +195,9 @@
     const cropX = Math.max(10, Math.min(90, Number(crop.centerX) || 50));
     const cropY = Math.max(10, Math.min(90, Number(crop.centerY) || 50));
     const cropScale = Math.max(1.5, Math.min(6, Number(crop.scale) || 3.5));
-    elements.focusZoomFrame.style.setProperty("--focus-crop-x", cropX + "%");
-    elements.focusZoomFrame.style.setProperty("--focus-crop-y", cropY + "%");
-    elements.focusZoomFrame.style.setProperty("--focus-crop-scale", String(cropScale));
+    elements.focusZoomFrame.style.setProperty("--focus-crop-size", (cropScale * 100) + "%");
+    elements.focusZoomFrame.style.setProperty("--focus-crop-left", (50 - cropX * cropScale) + "%");
+    elements.focusZoomFrame.style.setProperty("--focus-crop-top", (50 - cropY * cropScale) + "%");
     elements.focusZoomLoading.hidden = false;
     elements.focusZoomFrame.hidden = false;
     elements.focusZoomFrame.title = "注目部分の拡大Street View: " + (zoom.label || point.name);
