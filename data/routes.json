@@ -2,15 +2,16 @@
   {
     "id": "kyoto-central-01",
     "name": "京都まちなか基礎コース",
-    "description": "烏丸通を南へ進み、標識確認・左折時の危険予測・車線変更を練習する初級コースです。",
+    "description": "京都市中心部を南へ進み、標識確認・左折時の危険予測・車線変更を練習する初級コースです。",
     "start": {
-      "name": "烏丸御池駅南側・烏丸通",
-      "lat": 35.0106,
-      "lng": 135.7597,
+      "name": "御池高倉南側・高倉通",
+      "lat": 35.010235,
+      "lng": 135.7632063,
       "streetViewLocation": {
-        "lat": 35.00905,
-        "lng": 135.75965
+        "lat": 35.010235,
+        "lng": 135.7632063
       },
+      "streetViewPano": "TSJC5eosVryEh15CGZ6-jA",
       "heading": 180
     },
     "end": {
@@ -18,9 +19,10 @@
       "lat": 34.9858,
       "lng": 135.7588,
       "streetViewLocation": {
-        "lat": 34.987243,
-        "lng": 135.761087
+        "lat": 34.9872574,
+        "lng": 135.7611114
       },
+      "streetViewPano": "8BxXSBlZSH3jIwQ-p8gXig",
       "heading": 270
     },
     "distanceKm": 3.6,
