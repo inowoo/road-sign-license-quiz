@@ -2,9 +2,9 @@
   "use strict";
 
   const DATA_URLS = {
-    routes: "data/routes.json?v=20260718-9",
-    checkpoints: "data/checkpoints.json?v=20260718-9",
-    questions: "data/drive-questions.json?v=20260718-9"
+    routes: "data/routes.json?v=20260718-10",
+    checkpoints: "data/checkpoints.json?v=20260718-10",
+    questions: "data/drive-questions.json?v=20260718-10"
   };
   const CUSTOM_ROUTE_STORAGE_KEY = "driveReadyCustomRouteV1";
   const mapsApiKey = String(window.DRIVE_READY_CONFIG?.googleMapsApiKey || "").trim();
@@ -52,6 +52,7 @@
     customRouteSwap: document.getElementById("custom-route-swap"),
     customRoutePreview: document.getElementById("custom-route-preview"),
     customRouteSummary: document.getElementById("custom-route-summary"),
+    customRouteClear: document.getElementById("custom-route-clear"),
     customRouteFrame: document.getElementById("custom-route-frame"),
     customRouteLoading: document.getElementById("custom-route-loading"),
     sceneKicker: document.getElementById("scene-kicker"),
@@ -141,6 +142,18 @@
     } catch (_error) {
       return null;
     }
+  }
+
+  function clearCustomRoute() {
+    try {
+      localStorage.removeItem(CUSTOM_ROUTE_STORAGE_KEY);
+    } catch (_error) {
+      // The preview can still be closed when storage is unavailable.
+    }
+    elements.customRoutePreview.hidden = true;
+    elements.customRouteFrame.hidden = true;
+    elements.customRouteLoading.hidden = true;
+    elements.customRouteFrame.removeAttribute("src");
   }
 
   function showCustomRoute(origin, destination, shouldSave) {
@@ -558,6 +571,8 @@
     elements.customRouteOrigin.value = elements.customRouteDestination.value;
     elements.customRouteDestination.value = origin;
   });
+
+  elements.customRouteClear.addEventListener("click", clearCustomRoute);
 
   Promise.all([
     loadJson(DATA_URLS.routes),

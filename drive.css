@@ -140,6 +140,26 @@
   font-size: 14px;
 }
 
+.custom-route-clear {
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  margin-left: auto;
+  flex: 0 0 40px;
+  border: 2px solid #b8c8ce;
+  border-radius: 50%;
+  background: white;
+  color: var(--ink-soft);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.custom-route-clear:hover,
+.custom-route-clear:focus-visible {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
 .custom-route-map {
   position: relative;
   min-width: 200px;
@@ -1067,9 +1087,20 @@
   }
 
   .custom-route-summary {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 4px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 40px;
+    align-items: start;
+    gap: 4px 10px;
+  }
+
+  .custom-route-summary span,
+  .custom-route-summary strong {
+    grid-column: 1;
+  }
+
+  .custom-route-clear {
+    grid-column: 2;
+    grid-row: 1 / span 2;
   }
 
   .custom-route-map {

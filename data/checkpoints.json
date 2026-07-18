@@ -13,9 +13,9 @@
     ],
     "focusZoom": {
       "label": "車両（組合せ）通行止め・7-20",
-      "heading": 176,
-      "pitch": -4,
-      "fov": 22
+      "heading": 174,
+      "pitch": 0,
+      "fov": 12
     },
     "questionId": "drive-sign-time-01",
     "type": "road-sign",
